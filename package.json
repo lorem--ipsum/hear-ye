@@ -1,0 +1,26 @@
+{
+  "name": "hear-ye",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "typings": "dist/hear-ye.d.ts",
+  "files": [
+    "dist/**/!(*.mocha).@(js|d.ts)"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^16.8.2",
+    "react-dom": "^16.8.2"
+  },
+  "devDependencies": {
+    "@types/react": "^16.8.3",
+    "@types/react-dom": "^16.8.1",
+    "tslib": "^1.9.3",
+    "typescript": "^3.3.1"
+  }
+}

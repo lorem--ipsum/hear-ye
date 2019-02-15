@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "noImplicitAny": true,
+    "noEmitOnError": true,
+    "declaration": true,
+    "removeComments": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "strictNullChecks": false,
+    "skipLibCheck": true,
+    "importHelpers": true,
+    "target": "es5",
+    "lib": ["dom", "es2016"],
+    "module": "commonjs",
+    "rootDir": "src",
+    "outDir": "dist",
+    "moduleResolution": "node",
+    "jsx": "react",
+    "experimentalDecorators": true
+  },
+  "include": [
+    "src/hear-ye.tsx",
+  ]
+}
