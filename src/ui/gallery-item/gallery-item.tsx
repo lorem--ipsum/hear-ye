@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export interface GalleryItemProps extends React.ComponentProps<any> {
+export interface GalleryItemProps extends React.Props<any> {
 
 }
 

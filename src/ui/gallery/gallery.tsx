@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { GalleryItem } from '../gallery-item/gallery-item';
 
-export interface GalleryProps extends React.ComponentProps<any> {
+export interface GalleryProps extends React.Props<any> {
 
 }
 
@@ -21,7 +21,7 @@ export class Gallery extends React.Component<GalleryProps, GalleryState> {
     const examples = Gallery.examples;
 
     return <div className="hear-ye-gallery">
-      {examples}
+      {examples.map((e, i) => React.cloneElement(e, {key: i}))}
     </div>;
   }
 }
