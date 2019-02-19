@@ -18,7 +18,16 @@ const options = {
   logLevel: 3
 };
 
-module.exports = async function(verbose: boolean) {
+async function cleanUp() {
+  const files = [
+    there('demo/tmp'),
+    there('.cache')
+  ];
+
+  return Promise.all(files.map(f => fs.remove(f)));
+}
+
+module.exports = async function(singleRun: boolean, verbose: boolean) {
   if (verbose) options.logLevel = 4;
 
   await fs.copy(here('tmp'), there('demo/tmp'))
@@ -28,5 +37,19 @@ module.exports = async function(verbose: boolean) {
 
   const bundler = new Bundler(there('demo/tmp/index.html'), options);
 
+  if (singleRun) {
+    await bundler.bundle();
+    await cleanUp();
+    process.exit(0);
+    return;
+  }
+
   const bundle = await bundler.serve();
 };
+
+process.on('SIGINT', function() {
+  cleanUp()
+    .then(() => process.exit())
+    .catch(() => process.exit())
+    ;
+});
