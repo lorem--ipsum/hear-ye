@@ -1,0 +1,25 @@
+#!/usr/bin/env node
+
+const yargs = require('yargs');
+const log = require('../dist/utils/log');
+
+const argv = yargs
+  .command('default', 'Watches and rebuilds demo if necessary')
+
+  .describe('once', 'Runs only once')
+
+  .option('verbose', {
+    alias: 'v',
+    default: false
+  })
+
+  .help('h')
+  .alias('h', 'help')
+
+  .argv;
+
+log.setDebug(argv.verbose);
+
+const hearYe = require('../dist/hear-ye.js');
+
+hearYe();

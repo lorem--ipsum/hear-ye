@@ -2,24 +2,35 @@
   "name": "hear-ye",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
-  "typings": "dist/hear-ye.d.ts",
+  "main": "dist/ui/hear-ye-ui-api.js",
+  "typings": "dist/ui/hear-ye-ui-api.d.ts",
+  "bin": {
+    "hear-ye": "bin/hear-ye"
+  },
   "files": [
-    "dist/**/!(*.mocha).@(js|d.ts)"
+    "bin/",
+    "dist/"
   ],
   "scripts": {
+    "compile": "./scripts/compile",
     "test": "exit 0"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "chalk": "^2.4.2",
+    "fs-extra": "^7.0.1",
     "react": "^16.8.2",
-    "react-dom": "^16.8.2"
+    "react-dom": "^16.8.2",
+    "yargs": "^13.2.1"
   },
   "devDependencies": {
+    "@types/fs-extra": "^5.0.5",
+    "@types/node": "^11.9.4",
     "@types/react": "^16.8.3",
     "@types/react-dom": "^16.8.1",
+    "@types/yargs": "^12.0.9",
     "tslib": "^1.9.3",
     "typescript": "^3.3.1"
   }

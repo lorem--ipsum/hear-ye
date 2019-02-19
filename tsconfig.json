@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "allowJs": false,
     "noImplicitAny": true,
     "noEmitOnError": true,
     "declaration": true,
@@ -9,16 +10,20 @@
     "strictNullChecks": false,
     "skipLibCheck": true,
     "importHelpers": true,
-    "target": "es5",
+    "target": "es2016",
     "lib": ["dom", "es2016"],
     "module": "commonjs",
     "rootDir": "src",
     "outDir": "dist",
     "moduleResolution": "node",
     "jsx": "react",
-    "experimentalDecorators": true
+    "types": ["node"]
   },
   "include": [
-    "src/hear-ye.tsx",
+  ],
+  "files": [
+    "src/hear-ye.ts",
+    "src/ui/hear-ye-ui-api.ts",
+    "src/utils/log.ts"
   ]
 }

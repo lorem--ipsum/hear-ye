@@ -8,11 +8,11 @@ export interface GalleryItemState {
 
 }
 
-export class GalleryItem extends React.Component<GalleryItemProps, GalleryItemState> {
+export class GalleryItem<S extends GalleryItemState = {}> extends React.Component<GalleryItemProps, S> {
   constructor(props: GalleryItemProps, context: any) {
     super(props, context);
 
-    this.state = {};
+    this.state = {} as any;
   }
 
   render() {
