@@ -23,6 +23,7 @@
     "import-glob-loader": "^1.1.0",
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
+    "ts-loader": "^5.3.3",
     "tslib": "^1.9.3",
     "webpack": "^4.29.5",
     "webpack-cli": "^3.2.3",
