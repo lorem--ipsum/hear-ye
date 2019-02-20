@@ -14,18 +14,32 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.tsx$/,
+        test: /\.tsx?$/,
         use: ['ts-loader', 'import-glob-loader']
       },
+      {
+        test: /\.s?css$/,
+        use: [
+          {loader: 'style-loader'},
+          {loader: 'css-loader'},
+          {
+            loader: 'postcss-loader',
+            options: {
+              ident: 'postcss',
+              plugins: () => [
+                require('postcss-preset-env')({
+                  browsers: ['> 1%', 'last 3 versions', 'Firefox ESR', 'Opera 12.1']
+                })
+              ]
+            }
+          },
+          {loader: 'sass-loader'}
+        ]
+      }
     ]
   },
-  resolveLoader: {
-    alias: {
-      "glob-loader": path.join(__dirname, "./glob-loader.js")
-    }
-  },
   resolve: {
-    extensions: [  '.demo.tsx', '.tsx', '.ts', '.js' ]
+    extensions: [  '.demo.tsx', '.tsx', '.ts', '.js', '.scss', '.css' ]
   },
   output: {
     filename: 'bundle.js',

@@ -33,12 +33,6 @@ module.exports = async function(singleRun: boolean, verbose: boolean) {
   await fs.copy(here('assets'), thereTmp(''));
   await fs.copy(thereTmp('index.html'), there('demo/index.html'));
 
-  // const content = await fs.readFile(there(thereTmp('index.tsx')));
-  // const newContent = String(content).replace('%demo-inport-glob%', path.relative(thereTmp('index.tsx'), ));
-
-  // %demo-inport-glob%
-  // ../src/**/*.demo.tsx
-
 
   const config = require(thereTmp('webpack.config.js'));
   const webpackCompiler = webpack(config);
