@@ -39,6 +39,7 @@ module.exports = {
     ]
   },
   resolve: {
+    // modules: ['node_modules', '.'],
     extensions: [  '.demo.tsx', '.tsx', '.ts', '.js', '.scss', '.css' ]
   },
   output: {
