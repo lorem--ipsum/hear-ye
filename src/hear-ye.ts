@@ -1,4 +1,5 @@
 import * as process from 'process';
+import * as path from 'path';
 import { spawn } from 'child_process';
 import hereAndThere from './utils/here-and-there';
 import * as webpack from 'webpack';
@@ -9,44 +10,53 @@ const cwd = process.cwd();
 
 const { here, there } = hereAndThere(cwd, __dirname);
 
-// Bundler options
+let thereTmp = (str: string) => there(str);
+
+if (fs.existsSync(there('tsconfig.json'))) {
+  const rootDir = ((require(there('tsconfig.json')).compilerOptions || {}).rootDir || '');
+  thereTmp = (str: string) => there(path.resolve(rootDir, '.tmp', str));
+} else {
+  throw new Error('Could not find tsconfig.json file');
+}
 
 async function cleanUp() {
   const files = [
-    there('.tmp')
+    thereTmp('')
   ];
 
   return Promise.all(files.map(f => fs.remove(f)));
 }
 
 module.exports = async function(singleRun: boolean, verbose: boolean) {
-  // if (verbose) options.logLevel = 4;
+  const additionalArgs: string[] = [];
 
-  await fs.copy(here('.tmp'), there('.tmp'));
-  await fs.copy(there('.tmp/index.html'), there('demo/index.html'));
+  await fs.copy(here('assets'), thereTmp(''));
+  await fs.copy(thereTmp('index.html'), there('demo/index.html'));
 
-  const config = require(there('.tmp/webpack.config.js'));
+  // const content = await fs.readFile(there(thereTmp('index.tsx')));
+  // const newContent = String(content).replace('%demo-inport-glob%', path.relative(thereTmp('index.tsx'), ));
+
+  // %demo-inport-glob%
+  // ../src/**/*.demo.tsx
+
+
+  const config = require(thereTmp('webpack.config.js'));
   const webpackCompiler = webpack(config);
 
   if (singleRun) {
-    webpackCompiler.run((err, stats) => {
-      if (err) throw err;
 
-      if (stats.hasErrors()) {
-        console.log(stats.toString({colors: true, chunks: false}));
-        throw new Error('Unable to run');
-      }
+    if (verbose) additionalArgs.push('--display=verbose');
+    const webpack = spawn('webpack', ['--config', thereTmp('webpack.config.js'), ...additionalArgs], {stdio: "inherit"});
 
-      cleanUp().then(() => {
-        process.exit(0);
-      });
-
+    webpack.on('close', async code => {
+      await cleanUp();
+      process.exit(code);
     });
 
     return;
   }
 
-  const server = spawn('webpack-dev-server', ['--config', '.tmp/webpack.config.js', '--hot'], {stdio: "inherit"});
+  const server = spawn('webpack-dev-server', ['--config', thereTmp('webpack.config.js'), '--hot'], {stdio: "inherit"});
 
   server.on('close', async code => {
     await cleanUp();

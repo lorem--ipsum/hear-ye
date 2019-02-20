@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-import "../src/**/*.demo.tsx";
+import "../**/*.demo.tsx";
 
 import { Gallery } from 'hear-ye';
 

@@ -1,11 +1,13 @@
 const path = require('path');
 
+const rootDir = require(path.resolve('./tsconfig.json')).compilerOptions.rootDir;
+
 module.exports = {
   mode: 'development',
-  context: path.resolve('.'),
+  context: path.resolve('.', rootDir),
   entry: './.tmp/index.tsx',
   devServer: {
-    contentBase: path.resolve(__dirname, '../demo'),
+    contentBase: path.resolve('demo'),
     port: 1234,
     hot: true
   },

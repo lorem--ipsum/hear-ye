@@ -4,7 +4,7 @@ echo "Transpiling typescript..."
 tsc --pretty
 
 echo "Copying assets..."
-cp -a src/.tmp dist/
+cp -a src/assets dist/
 
 
 echo "All done!"
