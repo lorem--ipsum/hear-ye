@@ -1,6 +1,8 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
+%topLevelImports%
+
 import "../**/*.demo.tsx";
 
 import { Gallery } from 'hear-ye';

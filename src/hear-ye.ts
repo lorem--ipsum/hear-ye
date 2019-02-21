@@ -27,19 +27,53 @@ async function cleanUp() {
   return Promise.all(files.map(f => fs.remove(f)));
 }
 
-module.exports = async function(singleRun: boolean, verbose: boolean) {
+interface Args {
+  once?: boolean;
+  verbose?: boolean;
+  config?: string;
+}
+
+interface Config {
+  topLevelImports?: string[];
+}
+
+async function replaceInFile(file: string, pattern: string, replacement: string)  {
+  const content = await fs.readFile(file);
+
+  return await fs.writeFile(file, String(content).replace(pattern, replacement));
+}
+
+async function templatizeIndex(config: Config) {
+  const imports = (config.topLevelImports || [])
+    .join('\n')
+  ;
+
+  return await replaceInFile(thereTmp('index.tsx'), '%topLevelImports%', imports);
+}
+
+module.exports = async function(options: Args) {
   const additionalArgs: string[] = [];
+
+  let config: Config = {};
+
+  if (fs.existsSync(options.config)) {
+    config = require(there(options.config));
+  } else if (fs.existsSync(there('hear-ye.config.js'))) {
+    config = require(there('hear-ye.config.js'));
+  } else {
+    if (options.config) {
+      console.warn('Warning: could not find config at ' + options.config);
+    }
+  }
 
   await fs.copy(here('assets'), thereTmp(''));
   await fs.copy(thereTmp('index.html'), there('demo/index.html'));
 
+  templatizeIndex(config);
 
-  const config = require(thereTmp('webpack.config.js'));
-  const webpackCompiler = webpack(config);
+  if (options.once) {
 
-  if (singleRun) {
-
-    if (verbose) additionalArgs.push('--display=verbose');
+    if (options.verbose) additionalArgs.push('--display=verbose');
     const webpack = spawn('webpack', ['--config', thereTmp('webpack.config.js'), ...additionalArgs], {stdio: "inherit"});
 
     webpack.on('close', async code => {
