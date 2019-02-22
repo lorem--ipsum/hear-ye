@@ -67,9 +67,9 @@ module.exports = async function(options: Args) {
   let config: Config = {};
 
   if (fs.existsSync(options.config)) {
-    config = JSON.parse('' + fs.readFileSync(there(options.config)));
-  } else if (fs.existsSync(there('hear-ye.config.js'))) {
-    config = JSON.parse('' + fs.readFileSync(there('hear-ye.config.js')));
+    config = JSON.parse('' + fs.readFileSync(options.config));
+  } else if (fs.existsSync(there('hear-ye.config.json'))) {
+    config = JSON.parse('' + fs.readFileSync(there('hear-ye.config.json')));
   } else {
     if (options.config) {
       console.warn('Warning: could not find config at ' + options.config);

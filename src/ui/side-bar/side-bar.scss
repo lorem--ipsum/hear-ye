@@ -1,0 +1,19 @@
+.hy-side-bar {
+  background-color: #939393;
+  padding: 10px;
+
+  .component {
+    .label {
+      font-size: 1.1em;
+      margin-bottom: 10px;
+    }
+
+    .example {
+      padding-left: 15px;
+
+      &:not(:last-child) {
+        margin-bottom: 5px;
+      }
+    }
+  }
+}

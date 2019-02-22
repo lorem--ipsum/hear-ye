@@ -1,6 +1,7 @@
 const path = require('path');
-
 const rootDir = require(path.resolve('./tsconfig.json')).compilerOptions.rootDir;
+
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = {
   mode: 'development',
@@ -15,7 +16,13 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: ['ts-loader', 'import-glob-loader']
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {onlyCompileBundledFiles: true}
+          },
+          {loader: 'import-glob-loader'}
+        ]
       },
       {
         test: /\.s?css$/,
@@ -39,7 +46,8 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: [ '.tsx', '.ts', '.js', '.scss', '.css', '.demo.tsx' ]
+    extensions: [ '.tsx', '.ts', '.js', '.scss', '.css', '.demo.tsx' ],
+    plugins: [new TsconfigPathsPlugin({/* options: see below */})]
   },
   output: {
     filename: 'bundle.js',

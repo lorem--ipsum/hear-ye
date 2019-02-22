@@ -58,5 +58,9 @@ module.exports = {
     new CopyPlugin([
       { from: 'src/assets', to: 'assets' }
     ])
-  ]
+  ],
+
+  node: {
+    __dirname: false
+  }
 };

@@ -7,4 +7,4 @@ import "../**/*.demo.tsx";
 
 import { Gallery } from 'hear-ye';
 
-ReactDOM.render(React.createElement(Gallery), document.getElementsByClassName('app-container')[0]);
+ReactDOM.render(React.createElement(Gallery), document.getElementsByClassName('hy-container')[0]);
