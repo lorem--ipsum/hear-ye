@@ -23,7 +23,6 @@
   ],
   "files": [
     "src/hear-ye.ts",
-    "src/ui/hear-ye-ui-api.ts",
-    "src/utils/log.ts"
+    "src/ui/hear-ye-ui-api.ts"
   ]
 }

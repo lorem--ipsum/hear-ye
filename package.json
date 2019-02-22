@@ -2,7 +2,7 @@
   "name": "hear-ye",
   "version": "0.0.9",
   "description": "",
-  "main": "dist/ui/hear-ye-ui-api.js",
+  "main": "dist/hear-ye-ui-api.js",
   "typings": "dist/ui/hear-ye-ui-api.d.ts",
   "bin": {
     "hear-ye": "bin/hear-ye"
@@ -12,7 +12,7 @@
     "dist/"
   ],
   "scripts": {
-    "compile": "./scripts/compile",
+    "compile": "webpack",
     "test": "exit 0"
   },
   "keywords": [],
@@ -22,17 +22,21 @@
     "fs-extra": "^7.0.1",
     "import-glob-loader": "^1.1.0",
     "node-sass": "^4.11.0",
-    "postcss-loader": "^3.0.0",
     "postcss-preset-env": "^6.5.0",
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
-    "sass-loader": "^7.1.0",
-    "style-loader": "^0.23.1",
     "ts-loader": "^5.3.3",
     "webpack-cli": "^3.2.3",
     "webpack-dev-server": "^3.1.14",
     "webpack": "^4.29.5",
-    "yargs": "^13.2.1"
+    "yargs": "^13.2.1",
+    "copy-webpack-plugin": "^5.0.0",
+    "css-loader": "^2.1.0",
+    "postcss-loader": "^3.0.0",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.1",
+    "tslib": "^1.9.3",
+    "typescript": "^3.3.1"
   },
   "devDependencies": {
     "@types/fs-extra": "^5.0.5",
@@ -41,8 +45,6 @@
     "@types/react-dom": "^16.8.1",
     "@types/webpack": "4.4.12",
     "@types/webpack-dev-server": "^3.1.2",
-    "@types/yargs": "^12.0.9",
-    "tslib": "^1.9.3",
-    "typescript": "^3.3.1"
+    "@types/yargs": "^12.0.9"
   }
 }

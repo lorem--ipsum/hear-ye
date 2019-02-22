@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import './gallery.scss';
+
 export interface GalleryItem {
   component: JSX.Element;
   name: string;
