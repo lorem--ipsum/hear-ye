@@ -7,6 +7,7 @@ require('./side-bar.scss');
 export interface SideBarProps extends React.Props<any> {
   examples: Example[];
   onClick: (example: Example) => void;
+  selectedExample?: Example;
 }
 
 export interface SideBarState {

@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import { StateRouter as Router, Route } from '@implydata/caladan';
+
 import { SideBar } from '../side-bar/side-bar';
 
 import './gallery.scss';
@@ -16,7 +18,6 @@ export interface GalleryProps extends React.Props<any> {
 }
 
 export interface GalleryState {
-  selectedExample?: string;
 
 }
 
@@ -46,29 +47,41 @@ export class Gallery extends React.Component<GalleryProps, GalleryState> {
     super(props, context);
 
     this.state = {
-      selectedExample: Gallery.examples[0].id
     };
   }
 
   selectItem = (item: Example) => {
-    this.setState({
-      selectedExample: item.id
-    });
+    window.history.pushState(null, '', item.id);
   }
 
   render() {
-    const { selectedExample } = this.state;
+    const {  } = this.state;
 
     const examples = Gallery.examples;
 
     return <div className="hy-gallery">
-      <SideBar examples={examples} onClick={this.selectItem}/>
-      <div className="main">
-        {selectedExample
-          ? examples.find(e => e.id === selectedExample).component
-          : null
-        }
-      </div>
+      <Router>
+        <Route fragment="">
+          <>
+            <SideBar examples={examples} onClick={this.selectItem}/>
+            <div className="main">
+              Nothing to show, move along.
+            </div>
+          </>
+        </Route>
+        <Route fragment=":exampleId" renderer={(v, redirect) => {
+
+          const example = examples.find(e => e.id === v.exampleId);
+          if (!example) redirect('');
+
+          return <>
+            <SideBar examples={examples} onClick={this.selectItem} selectedExample={example}/>
+            <div className="main">
+              {example.component}
+            </div>
+          </>;
+        }}/>
+      </Router>
     </div>;
   }
 }

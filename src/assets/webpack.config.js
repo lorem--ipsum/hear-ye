@@ -10,7 +10,8 @@ module.exports = {
   devServer: {
     contentBase: path.resolve('demo'),
     port: 1234,
-    hot: true
+    hot: true,
+    historyApiFallback: true
   },
   module: {
     rules: [

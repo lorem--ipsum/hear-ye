@@ -1,6 +1,7 @@
 .hy-gallery {
   $side-bar-width: 200px;
-  $header-bar-height: 0px;
+  $outer-padding: 5px;
+  $inner-color: #FAFAFB;
 
   position: absolute;
   left: 0;
@@ -8,29 +9,28 @@
   top: 0;
   bottom: 0;
 
-  .hy-header-bar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: $header-bar-height;
-  }
+  background-color: #DADADA;
 
   .hy-side-bar {
     position: absolute;
-    left: 0;
+    left: $outer-padding;
     width: $side-bar-width;
-    top: $header-bar-height;
-    bottom: 0;
+    top: $outer-padding;
+    bottom: $outer-padding;
+
+    background-color: #F3F3F3;
+    border-radius: 1px;
   }
 
   .main {
     position: absolute;
     padding: 10px;
-    left: $side-bar-width;
-    right: 0;
-    top: $header-bar-height;
-    bottom: 0;
-    background-color: #DADADA;
+    left: $side-bar-width + $outer-padding + 5px;
+    right: $outer-padding;
+    top: $outer-padding;
+    bottom: $outer-padding;
+
+    background-color: $inner-color;
+    border-radius: 1px;
   }
 }
