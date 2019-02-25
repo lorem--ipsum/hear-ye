@@ -12,7 +12,7 @@
     "dist/"
   ],
   "scripts": {
-    "compile": "webpack",
+    "compile": "webpack -p",
     "test": "exit 0"
   },
   "keywords": [],
