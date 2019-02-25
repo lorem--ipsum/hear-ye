@@ -48,6 +48,6 @@ export class Sink extends React.Component<SinkProps, SinkState> {
   render() {
     const { children } = this.props;
 
-    return children;
+    return <div className="hy-sink">{children}</div>;
   }
 }

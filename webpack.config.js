@@ -1,6 +1,9 @@
 const process = require('process');
 const CopyPlugin = require('copy-webpack-plugin');
 
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
+
 module.exports = {
   target: 'node',
   mode: process.env.NODE_ENV || 'development',
@@ -57,7 +60,8 @@ module.exports = {
   plugins: [
     new CopyPlugin([
       { from: 'src/assets', to: 'assets' }
-    ])
+    ]),
+    // new BundleAnalyzerPlugin()
   ],
 
   node: {

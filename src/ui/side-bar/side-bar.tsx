@@ -22,46 +22,22 @@ export class SideBar extends React.Component<SideBarProps, SideBarState> {
   renderExamples() {
     const { examples, onClick } = this.props;
 
-    let components: Record<string, Example[]> = {};
-
-    examples.forEach(example => {
-      const a = components[example.componentLabel] || [];
-      a.push(example);
-      components[example.componentLabel] = a;
-    });
-
-    const elements: JSX.Element[] = [];
-
-    Object.keys(components).forEach(key => {
-      const c = components[key];
-
-      if (!c.length) return;
-
-      if (c.length === 1) {
-        elements.push(<div className="component" key={key} onClick={() => onClick(c[0])}>
-          <div className="label">{key}</div>
-        </div>);
-        return;
-      }
-
-      elements.push(<div className="component" key={key} onClick={c.length === 1 ? () => onClick(c[0]) : null}>
-        <div className="label">{key}</div>
-        {c.map(this.renderExample)}
-      </div>);
-    });
-
-    return elements;
+    return examples.map((e, i) => this.renderExample(e, i, 0));
   }
 
-  renderExample = (example: Example, index: number) => {
-    const { onClick } = this.props;
+  renderExample = (example: Example, index: number, nestedness: number) => {
+    const { onClick, selectedExample} = this.props;
+
+    const hasChildren = example.examples && example.examples.length > 0;
 
     return <div
       key={index}
-      className="example"
-      onClick={() => onClick(example)}
+      className={classNames('example', {selected: selectedExample && selectedExample === example})}
+      onClick={hasChildren ? null : () => onClick(example)}
+      style={{paddingLeft: nestedness*20 + 10}}
     >
-      {example.exampleLabel}
+      <div className="label">{example.label}</div>
+      {example.examples ? example.examples.map((e, i) => this.renderExample(e, i, nestedness + 1)) : null}
     </div>;
   }
 

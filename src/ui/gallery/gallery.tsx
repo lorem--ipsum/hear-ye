@@ -1,16 +1,17 @@
 import * as React from 'react';
 
-import { StateRouter as Router, Route } from '@implydata/caladan';
+import { StateRouter as Router, Route } from '@implydata/caladan/build/utils/router/router';
 
 import { SideBar } from '../side-bar/side-bar';
+import { ExampleSummary } from '../example-summary/example-summary';
 
 import './gallery.scss';
 
-export interface Example {
-  component: JSX.Element;
-  componentLabel: string;
-  exampleLabel?: string;
-  id?: string;
+export type Example = {
+  label: string;
+  path?: string[];
+  examples?: Example[];
+  component?: JSX.Element;
 }
 
 export interface GalleryProps extends React.Props<any> {
@@ -24,23 +25,39 @@ export interface GalleryState {
 export class Gallery extends React.Component<GalleryProps, GalleryState> {
   static examples: Example[] = [];
 
-  static add(example: Example) {
-    const { componentLabel, exampleLabel } = example;
+  static add(example: {component: JSX.Element; path: string[]}) {
+    const { path } = example;
 
-    if (!example.id) {
+    const p = path.map(p => p.replace(/\/+/, ' '));
 
-      example.id = componentLabel.toLowerCase().replace(/\s+/g, '_');
+    let examples = Gallery.examples;
+    let _p = p.shift();
+    while (_p && p.length >= 0) {
+      const found = examples.find(e => e.label === _p);
+      if (found) {
+        examples = found.examples;
+      } else {
 
-      if (exampleLabel) {
-        example.id += '-' + exampleLabel.toLowerCase().replace(/\s+/g, '_');
+        if (p.length === 0) {
+          examples.push({
+            label: _p,
+            path,
+            component: example.component
+          });
+          break;
+
+        } else {
+          examples.push({
+            label: _p,
+            examples: [] as Example[]
+          });
+
+          examples = examples[examples.length - 1].examples;
+        }
       }
-    }
 
-    if (Gallery.examples.find(e => e.id === example.id)) {
-      throw new Error('An example with this id already exists: ' + example.id);
+      _p = p.shift();
     }
-
-    Gallery.examples.push(example);
   }
 
   constructor(props: GalleryProps, context: any) {
@@ -51,12 +68,28 @@ export class Gallery extends React.Component<GalleryProps, GalleryState> {
   }
 
   selectItem = (item: Example) => {
-    window.history.pushState(null, '', item.id);
+    const url = item.path.map(encodeURI).join('/');
+
+    window.history.pushState(null, '', '/' + url);
+  }
+
+  getExampleForId(id: string): Example {
+    const path = id.split('/').map(decodeURI);
+
+    let examples = Gallery.examples;
+    let p = path.shift();
+
+    while(p && path.length >= 0) {
+      const example = examples.find(e => e.label === p)
+      if (path.length === 0) return example;
+      examples = example.examples;
+      p = path.shift();
+    }
+
+    return null;
   }
 
   render() {
-    const {  } = this.state;
-
     const examples = Gallery.examples;
 
     return <div className="hy-gallery">
@@ -69,14 +102,20 @@ export class Gallery extends React.Component<GalleryProps, GalleryState> {
             </div>
           </>
         </Route>
-        <Route fragment=":exampleId" renderer={(v, redirect) => {
+        <Route fragment=":$exampleId" renderer={(v, redirect) => {
 
-          const example = examples.find(e => e.id === v.exampleId);
-          if (!example) redirect('');
+          const example = this.getExampleForId(v.exampleId);
+
+          if (!example) {
+            console.log('Could not find example with id ' + v.exampleId);
+            redirect('');
+            return null;
+          }
 
           return <>
-            <SideBar examples={examples} onClick={this.selectItem} selectedExample={example}/>
+            {<SideBar examples={examples} onClick={this.selectItem} selectedExample={example}/>}
             <div className="main">
+              <ExampleSummary example={example}/>
               {example.component}
             </div>
           </>;

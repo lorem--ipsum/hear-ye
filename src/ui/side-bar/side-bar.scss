@@ -1,18 +1,37 @@
 .hy-side-bar {
-  padding: 10px;
+  padding-top: 10px;
 
-  .component {
-    .label {
-      font-size: 1.1em;
-      margin-bottom: 10px;
+  .example {
+    cursor: pointer;
+
+    > .label {
+      padding: 10px;
     }
 
-    .example {
-      padding-left: 15px;
-
-      &:not(:last-child) {
-        margin-bottom: 5px;
+    &:hover, &.hover {
+      > .label {
+        // color: white;
+        // background-color: #2096F3;
       }
     }
+
+    &.selected {
+      cursor: initial;
+
+      > .label:before {
+        $size: 10px;
+        content: "";
+        position: absolute;
+        left: -4px;
+        top: 11px;
+        width: $size;
+        height: $size;
+        border-radius: 50%;
+
+        // color: white;
+        background-color: steelblue;
+      }
+    }
+
   }
 }

@@ -11,6 +11,7 @@ module.exports = {
     contentBase: path.resolve('demo'),
     port: 1234,
     hot: true,
+    publicPath: '/',
     historyApiFallback: true
   },
   module: {
