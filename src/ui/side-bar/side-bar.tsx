@@ -32,12 +32,17 @@ export class SideBar extends React.Component<SideBarProps, SideBarState> {
 
     return <div
       key={index}
-      className={classNames('example', {selected: selectedExample && selectedExample === example})}
+      className={classNames('example', {selected: selectedExample && selectedExample === example, deaf: hasChildren})}
       onClick={hasChildren ? null : () => onClick(example)}
-      style={{paddingLeft: nestedness*20 + 10}}
     >
-      <div className="label">{example.label}</div>
+      <div
+        className="label"
+        style={{paddingLeft: nestedness*20 + 10}}
+      >{example.label}
+      </div>
+
       {example.examples ? example.examples.map((e, i) => this.renderExample(e, i, nestedness + 1)) : null}
+
     </div>;
   }
 

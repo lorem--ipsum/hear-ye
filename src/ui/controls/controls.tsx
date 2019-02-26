@@ -1,14 +1,7 @@
-/*
- * Copyright (c) 2018 Imply Data, Inc. All rights reserved.
- *
- * This software is the confidential and proprietary information
- * of Imply Data, Inc.
- */
-
-require('./controls.scss');
-
 import * as React from 'react';
 import * as classNames from 'classnames';
+
+require('./controls.scss');
 
 export interface ControlsProps extends React.Props<any> {
 }
@@ -25,7 +18,7 @@ export class Controls extends React.Component<ControlsProps, ControlsState> {
   render() {
     const { children } = this.props;
 
-    return <div className="hy-controls">
+    return <div className="hy-controls hy-section">
       <div className="title">Controls</div>
       <div className="content">{children}</div>
     </div>;

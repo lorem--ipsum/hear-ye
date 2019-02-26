@@ -1,0 +1,17 @@
+.hy-error-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: hsla(0, 0%, 0%, 0.7);
+
+  color: #FEFEFE;
+  font-size: 1.4em;
+  font-family: monospace;
+  padding: 40px;
+
+  .error:not(:last-child) {
+    margin-bottom: 20px;
+  }
+}

@@ -4,6 +4,10 @@ import { StateRouter as Router, Route } from '@implydata/caladan/build/utils/rou
 
 import { SideBar } from '../side-bar/side-bar';
 import { ExampleSummary } from '../example-summary/example-summary';
+import { ErrorOverlay } from '../error-overlay/error-overlay';
+
+const socket = require('webpack-dev-server/client/socket.js');
+const ansiRegex = require('ansi-regex/index.js')();
 
 import './gallery.scss';
 
@@ -14,15 +18,11 @@ export type Example = {
   component?: JSX.Element;
 }
 
-export interface GalleryProps extends React.Props<any> {
-
-}
-
 export interface GalleryState {
-
+  errors?: string[];
 }
 
-export class Gallery extends React.Component<GalleryProps, GalleryState> {
+export class Gallery extends React.Component<{}, GalleryState> {
   static examples: Example[] = [];
 
   static add(example: {component: JSX.Element; path: string[]}) {
@@ -60,11 +60,24 @@ export class Gallery extends React.Component<GalleryProps, GalleryState> {
     }
   }
 
-  constructor(props: GalleryProps, context: any) {
+  constructor(props: {}, context: any) {
     super(props, context);
+    this.state = {};
+  }
 
-    this.state = {
-    };
+  componentDidMount() {
+    socket('http://localhost:1234/sockjs-node', {
+      errors: (_errors: string[]) => {
+        this.setState({
+          errors: _errors.map(str => str.replace(ansiRegex, ''))
+        });
+      },
+      ok: () => {
+        this.setState({
+          errors: null
+        });
+      }
+    });
   }
 
   selectItem = (item: Example) => {
@@ -90,6 +103,8 @@ export class Gallery extends React.Component<GalleryProps, GalleryState> {
   }
 
   render() {
+    const { errors } = this.state;
+
     const examples = Gallery.examples;
 
     return <div className="hy-gallery">
@@ -121,6 +136,11 @@ export class Gallery extends React.Component<GalleryProps, GalleryState> {
           </>;
         }}/>
       </Router>
+      {
+        errors
+        ? <ErrorOverlay errors={errors}/>
+        : null
+      }
     </div>;
   }
 }

@@ -5,6 +5,7 @@ import * as classNames from 'classnames';
 
 export interface SinkProps extends React.Props<any> {
   customCSS?: string;
+  noPadding?: boolean;
 }
 
 export interface SinkState {
@@ -46,8 +47,8 @@ export class Sink extends React.Component<SinkProps, SinkState> {
   }
 
   render() {
-    const { children } = this.props;
+    const { children, noPadding } = this.props;
 
-    return <div className="hy-sink">{children}</div>;
+    return <div className={classNames('hy-sink hy-section', {'no-padding': noPadding})}>{children}</div>;
   }
 }

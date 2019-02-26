@@ -86,7 +86,7 @@ module.exports = async function(options: Args) {
   if (options.once) {
 
     if (options.verbose) additionalArgs.push('--display=verbose');
-    const webpack = spawn('webpack', ['--config', thereTmp('webpack.config.js'), ...additionalArgs], {stdio: "inherit"});
+    const webpack = spawn('webpack', ['--config', thereTmp('webpack.config.js'), ...additionalArgs], {stdio: 'inherit'});
 
     webpack.on('close', async code => {
       await cleanUp();
@@ -96,7 +96,7 @@ module.exports = async function(options: Args) {
     return;
   }
 
-  const server = spawn('webpack-dev-server', ['--config', thereTmp('webpack.config.js'), '--hot'], {stdio: "inherit"});
+  const server = spawn('webpack-dev-server', ['--config', thereTmp('webpack.config.js'), '--hot'], {stdio: 'inherit'});
 
   server.on('close', async code => {
     await cleanUp();

@@ -4,33 +4,24 @@
   .example {
     cursor: pointer;
 
+    &.deaf {
+      cursor: initial;
+    }
+
     > .label {
       padding: 10px;
     }
 
     &:hover, &.hover {
-      > .label {
-        // color: white;
-        // background-color: #2096F3;
+      &:not(.deaf):not(.selected) {
+        background-color: lightgrey;
       }
     }
 
     &.selected {
       cursor: initial;
-
-      > .label:before {
-        $size: 10px;
-        content: "";
-        position: absolute;
-        left: -4px;
-        top: 11px;
-        width: $size;
-        height: $size;
-        border-radius: 50%;
-
-        // color: white;
-        background-color: steelblue;
-      }
+      background-color: darkgrey;
+      color: white;
     }
 
   }
