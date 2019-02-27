@@ -8,13 +8,6 @@ module.exports = {
   context: path.resolve('.', rootDir),
   entry: './.tmp/index.tsx',
 
-  optimization: {
-    splitChunks: {
-      // include all types of chunks
-      chunks: 'all'
-    }
-  },
-
   devServer: {
     contentBase: path.resolve('demo'),
     port: 1234,
