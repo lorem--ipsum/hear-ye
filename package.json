@@ -12,6 +12,7 @@
     "dist/"
   ],
   "scripts": {
+    "pretest": "rm -rf build/ && webpack -p",
     "compile": "webpack -p",
     "test": "exit 0"
   },
