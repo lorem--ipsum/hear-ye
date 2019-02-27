@@ -32,6 +32,7 @@ interface Args {
   once?: boolean;
   verbose?: boolean;
   config?: string;
+  noCleanup?: boolean;
 }
 
 interface Config {
@@ -89,7 +90,7 @@ module.exports = async function(options: Args) {
     const webpack = spawn('webpack', ['--config', thereTmp('webpack.config.js'), ...additionalArgs], {stdio: 'inherit'});
 
     webpack.on('close', async code => {
-      await cleanUp();
+      if (options.noCleanup !== true) await cleanUp();
       process.exit(code);
     });
 
@@ -99,15 +100,19 @@ module.exports = async function(options: Args) {
   const server = spawn('webpack-dev-server', ['--config', thereTmp('webpack.config.js'), '--hot'], {stdio: 'inherit'});
 
   server.on('close', async code => {
-    await cleanUp();
+    if (options.noCleanup !== true) await cleanUp();
     process.exit(code);
   });
 
+  process.on('SIGINT', function() {
+    if (options.noCleanup === true) {
+      process.exit();
+    } else {
+      cleanUp()
+        .then(() => process.exit())
+        .catch(() => process.exit())
+        ;
+    }
+  });
 };
 
-process.on('SIGINT', function() {
-  cleanUp()
-    .then(() => process.exit())
-    .catch(() => process.exit())
-    ;
-});
