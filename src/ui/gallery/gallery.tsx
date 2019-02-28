@@ -60,24 +60,35 @@ export class Gallery extends React.Component<{}, GalleryState> {
     }
   }
 
+  private mounted: boolean;
+
   constructor(props: {}, context: any) {
     super(props, context);
     this.state = {};
   }
 
   componentDidMount() {
+    this.mounted = true;
+
     socket('http://localhost:1234/sockjs-node', {
       errors: (_errors: string[]) => {
+        if (!this.mounted) return;
         this.setState({
           errors: _errors.map(str => str.replace(ansiRegex, ''))
         });
       },
       ok: () => {
+        if (!this.mounted) return;
         this.setState({
           errors: null
         });
-      }
+      },
+      close: () => {}
     });
+  }
+
+  componentWillUnmount() {
+    this.mounted = false;
   }
 
   selectItem = (item: Example) => {
