@@ -1,5 +1,4 @@
 const webpack = require('webpack');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
@@ -49,13 +48,6 @@ module.exports = {
         include: src,
         use: [
           {loader: 'awesome-typescript-loader'},
-          // {
-          //   loader: 'ts-loader',
-          //   options: {
-          //     // transpileOnly: true,
-          //     experimentalWatchApi: true
-          //   }
-          // },
           {loader: 'import-glob-loader'}
         ]
       },
@@ -104,7 +96,6 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: '.tmp/index.html'
     }),
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-    // new BundleAnalyzerPlugin()
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
   ]
 };
