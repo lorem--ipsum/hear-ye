@@ -30,7 +30,6 @@ export class Sink extends React.Component<SinkProps, SinkState> {
     if (customCSS) this.detachCSS(customCSS);
   }
 
-
   attachCSS(css: string) {
     var element = document.createElement('style');
     element.setAttribute('type', 'text/css');

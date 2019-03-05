@@ -105,6 +105,9 @@ module.exports = async function(options: Args) {
   });
 
   process.on('SIGINT', function() {
+
+    server.kill();
+
     if (options.noCleanup === true) {
       process.exit();
     } else {
