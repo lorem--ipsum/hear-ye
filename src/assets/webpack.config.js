@@ -10,7 +10,7 @@ const src = path.resolve('.', rootDir);
 module.exports = {
   mode: 'development',
   context: src,
-  devtool: 'cheap-module-eval-source-map',
+  devtool: 'eval-cheap-module-source-map',
   entry: './.tmp/index.tsx',
   devServer: {
     contentBase: path.resolve('demo'),
@@ -47,7 +47,15 @@ module.exports = {
         test: /\.tsx?$/,
         include: src,
         use: [
-          {loader: 'awesome-typescript-loader'},
+          {
+            loader: 'ts-loader',
+            options: {
+              transpileOnly: true,
+              compilerOptions: {
+                declaration: false
+              }
+            }
+          },
           {loader: 'import-glob-loader'}
         ]
       },

@@ -21,7 +21,6 @@
   "license": "ISC",
   "dependencies": {
     "@implydata/caladan": "^5.4.0",
-    "awesome-typescript-loader": "^5.2.1",
     "classnames": "^2.2.6",
     "copy-webpack-plugin": "^5.0.0",
     "css-loader": "^2.1.0",
