@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { StateRouter as Router, Route } from '@implydata/caladan/build/utils/router/router';
+import { StateRouter as Router, Route } from '@implydata/caladan';
 
 import { SideBar } from '../side-bar/side-bar';
 import { ExampleSummary } from '../example-summary/example-summary';
