@@ -8,7 +8,7 @@ const rootDir = require(path.resolve('./tsconfig.json')).compilerOptions.rootDir
 const src = path.resolve('.', rootDir);
 
 module.exports = {
-  mode: 'development',
+  mode: process.env.NODE_ENV || 'development',
   context: src,
   devtool: 'eval-cheap-module-source-map',
   entry: './.tmp/index.tsx',

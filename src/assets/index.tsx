@@ -3,7 +3,11 @@ import * as ReactDOM from 'react-dom';
 
 %topLevelImports%
 
-import "../**/*.demo.tsx";
+function importAll(r) {
+  r.keys().forEach(r);
+}
+
+importAll((require as any).context('../', true, /\.demo\.tsx$/));
 
 import { Gallery } from 'hear-ye';
 
