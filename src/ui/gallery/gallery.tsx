@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { StateRouter as Router, Route } from '@implydata/caladan';
+import { Normalize } from '@smooth-ui/core-sc';
 
 import { SideBar } from '../side-bar/side-bar';
 import { ExampleSummary } from '../example-summary/example-summary';
@@ -20,6 +20,7 @@ export type Example = {
 
 export interface GalleryState {
   errors?: string[];
+  exampleId?: string;
 }
 
 export class Gallery extends React.Component<{}, GalleryState> {
@@ -70,6 +71,9 @@ export class Gallery extends React.Component<{}, GalleryState> {
   componentDidMount() {
     this.mounted = true;
 
+    window.addEventListener('hashchange', this.onHashChange);
+    this.onHashChange();
+
     socket('http://localhost:1234/sockjs-node', {
       errors: (_errors: string[]) => {
         if (!this.mounted) return;
@@ -88,16 +92,26 @@ export class Gallery extends React.Component<{}, GalleryState> {
   }
 
   componentWillUnmount() {
+    window.removeEventListener('hashchange', this.onHashChange);
     this.mounted = false;
+  }
+
+  onHashChange = () => {
+    const hash = window.location.hash.replace(/^#/, '');
+    this.setState({
+      exampleId: hash
+    });
   }
 
   selectItem = (item: Example) => {
     const url = item.path.map(encodeURI).join('/');
 
-    window.history.pushState(null, '', '/' + url);
+    window.location.hash = url;
   }
 
   getExampleForId(id: string): Example {
+    if (!id) return null;
+
     const path = id.split('/').map(decodeURI);
 
     let examples = Gallery.examples;
@@ -113,40 +127,42 @@ export class Gallery extends React.Component<{}, GalleryState> {
     return null;
   }
 
+  renderMain() {
+    const { exampleId } = this.state;
+
+    if (!exampleId) {
+      return <div className="main">
+        Nothing to show, move along.
+      </div>;
+    }
+
+    const example = exampleId ? this.getExampleForId(exampleId) : null;
+
+    if (!example) {
+      return <div className="main">
+        404, I guess?
+      </div>;
+    }
+
+    return <div className="main">
+      <ExampleSummary example={example}/>
+      {example.component}
+    </div>;
+  }
+
   render() {
-    const { errors } = this.state;
+    const { errors, exampleId } = this.state;
 
     const examples = Gallery.examples;
 
     return <div className="hy-gallery">
-      <Router>
-        <Route fragment="">
-          <>
-            <SideBar examples={examples} onClick={this.selectItem}/>
-            <div className="main">
-              Nothing to show, move along.
-            </div>
-          </>
-        </Route>
-        <Route fragment=":$exampleId" renderer={(v, redirect) => {
+      <SideBar
+        examples={examples}
+        onClick={this.selectItem}
+        selectedExample={this.getExampleForId(exampleId)}
+      />
 
-          const example = this.getExampleForId(v.exampleId);
-
-          if (!example) {
-            console.log('Could not find example with id ' + v.exampleId);
-            redirect('');
-            return null;
-          }
-
-          return <>
-            {<SideBar examples={examples} onClick={this.selectItem} selectedExample={example}/>}
-            <div className="main">
-              <ExampleSummary example={example}/>
-              {example.component}
-            </div>
-          </>;
-        }}/>
-      </Router>
+      { this.renderMain() }
       {
         errors
         ? <ErrorOverlay errors={errors}/>

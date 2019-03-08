@@ -1,29 +1,45 @@
 .hy-side-bar {
   padding-top: 10px;
-  overflow: auto;
 
-  .example {
-    cursor: pointer;
+  display: grid;
+  grid-template-rows: 40px auto;
 
-    &.deaf {
-      cursor: initial;
-    }
-
-    > .label {
-      padding: 10px;
-    }
-
-    &:hover, &.hover {
-      &:not(.deaf):not(.selected) {
-        background-color: lightgrey;
-      }
-    }
-
-    &.selected {
-      cursor: initial;
-      background-color: darkgrey;
-      color: white;
-    }
-
+  .search {
+    text-align: center;
+    grid-row-start: 1;
+    grid-row-end: 1;
   }
+
+  .examples {
+    grid-row-start: 2;
+    grid-row-end: 2;
+
+    overflow: auto;
+
+    .example {
+      cursor: pointer;
+
+      &.deaf {
+        cursor: initial;
+      }
+
+      > .label {
+        padding: 10px;
+      }
+
+      &:hover, &.hover {
+        &:not(.deaf):not(.selected) {
+          background-color: lightgrey;
+        }
+      }
+
+      &.selected {
+        cursor: initial;
+        background-color: darkgrey;
+        color: white;
+      }
+
+    }
+  }
+
 }

@@ -1,8 +1,19 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
+
+import { Input } from '@smooth-ui/core-sc';
+
 import { Example } from '../gallery/gallery';
 
 require('./side-bar.scss');
+
+function sort(examples: Example[]) {
+  return [...examples].sort((a, b) => {
+    if (a.label > b.label) return 1;
+    if (a.label < b.label) return -1;
+    return 0;
+  });
+}
 
 export interface SideBarProps extends React.Props<any> {
   examples: Example[];
@@ -11,18 +22,24 @@ export interface SideBarProps extends React.Props<any> {
 }
 
 export interface SideBarState {
+  searchString?: string;
 }
 
 export class SideBar extends React.Component<SideBarProps, SideBarState> {
   constructor(props: SideBarProps, context: any) {
     super(props, context);
-    this.state = {};
+    this.state = {
+      searchString: ''
+    };
   }
 
   renderExamples() {
     const { examples, onClick } = this.props;
+    const { searchString } = this.state;
 
-    return examples.map((e, i) => this.renderExample(e, i, 0));
+    return sort(examples)
+      .filter(e => searchString ? e.label.toLowerCase().includes(searchString.toLowerCase()) : true)
+      .map((e, i) => this.renderExample(e, i, 0));
   }
 
   renderExample = (example: Example, index: number, nestedness: number) => {
@@ -41,17 +58,27 @@ export class SideBar extends React.Component<SideBarProps, SideBarState> {
       >{example.label}
       </div>
 
-      {example.examples ? example.examples.map((e, i) => this.renderExample(e, i, nestedness + 1)) : null}
+      {example.examples ? sort(example.examples).map((e, i) => this.renderExample(e, i, nestedness + 1)) : null}
 
     </div>;
   }
 
   render() {
     const { examples } = this.props;
-    const {  } = this.state;
+    const { searchString } = this.state;
 
     return <div className="hy-side-bar">
-      {this.renderExamples()}
+      <div className="search">
+        <Input
+          placeholder="Search..."
+          size="sm"
+          value={searchString}
+          onChange={e => this.setState({searchString: (e.target as any).value})}
+        />
+      </div>
+      <div className="examples">
+        {this.renderExamples()}
+      </div>
     </div>;
   }
 }

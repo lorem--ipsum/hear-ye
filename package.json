@@ -20,7 +20,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@implydata/caladan": "^5.4.0",
+    "@smooth-ui/core-sc": "^9.1.0",
     "classnames": "^2.2.6",
     "copy-webpack-plugin": "^5.0.0",
     "css-loader": "^2.1.0",
@@ -35,6 +35,7 @@
     "react-live": "^1.12.0",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
+    "styled-components": "^4.1.3",
     "ts-loader": "^5.3.3",
     "tsconfig-paths-webpack-plugin": "^3.2.0",
     "tslib": "^1.9.3",

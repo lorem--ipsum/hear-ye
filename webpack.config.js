@@ -1,11 +1,45 @@
 const process = require('process');
 const CopyPlugin = require('copy-webpack-plugin');
 
-module.exports = {
+module.exports = [
+{
   target: 'node',
   mode: process.env.NODE_ENV || 'development',
   entry: {
-    'hear-ye': './src/hear-ye.ts',
+    'hear-ye': './src/hear-ye.ts'
+  },
+  module: {
+    rules: [
+      {test: /\.ts$/, use: ['ts-loader']}
+    ]
+  },
+  resolve: {
+    extensions: [ '.ts', '.js' ]
+  },
+
+  output: {
+    path: __dirname + '/dist',
+    filename: '[name].js',
+    library: '[name]',
+    libraryTarget: 'umd',
+    umdNamedDefine: true
+  },
+
+  plugins: [
+    new CopyPlugin([
+      { from: 'src/assets', to: 'assets' }
+    ])
+  ],
+
+  node: {
+    __dirname: false
+  }
+},
+
+{
+  target: 'web',
+  mode: process.env.NODE_ENV || 'development',
+  entry: {
     'hear-ye-ui-api': './src/ui/hear-ye-ui-api.ts'
   },
   module: {
@@ -48,19 +82,7 @@ module.exports = {
   },
 
   externals: {
-    "@implydata/little-pictures": "@implydata/little-pictures",
-    "@implydata/beltful": "@implydata/beltful",
     "react": "react",
     "react-dom": "react-dom"
-  },
-
-  plugins: [
-    new CopyPlugin([
-      { from: 'src/assets', to: 'assets' }
-    ])
-  ],
-
-  node: {
-    __dirname: false
   }
-};
+}];
