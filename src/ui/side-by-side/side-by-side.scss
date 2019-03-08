@@ -1,0 +1,20 @@
+.hy-side-by-side {
+  display: flex;
+  flex-direction: row;
+
+  .hy-sink {
+    flex: 1;
+  }
+
+  .hy-controls {
+    width: 300px;
+  }
+
+  > * {
+    margin-bottom: 0;
+
+    &:not(:last-child) {
+      margin-right: 10px;
+    }
+  }
+}

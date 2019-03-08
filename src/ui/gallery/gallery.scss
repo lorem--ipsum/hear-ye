@@ -11,7 +11,7 @@
 
   background-color: #DADADA;
 
-  .hy-side-bar {
+  > .hy-side-bar {
     position: absolute;
     left: $outer-padding;
     width: $side-bar-width;
@@ -22,7 +22,7 @@
     border-radius: 1px;
   }
 
-  .main {
+  > .main {
     position: absolute;
     padding: 10px;
     left: $side-bar-width + $outer-padding + 5px;
@@ -33,6 +33,10 @@
 
     background-color: $inner-color;
     border-radius: 1px;
+
+    > *:not(:last-child) {
+      margin-bottom: 20px;
+    }
   }
 
   @import './section';
