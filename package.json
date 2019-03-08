@@ -1,6 +1,6 @@
 {
   "name": "hear-ye",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "description": "",
   "main": "dist/hear-ye-ui-api.js",
   "typings": "dist/ui/hear-ye-ui-api.d.ts",
