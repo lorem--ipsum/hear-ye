@@ -10,6 +10,7 @@ const { here, there } = hereAndThere(cwd, __dirname);
 
 let thereTmp = (str: string) => there(str);
 
+const packageJSON: any = JSON.parse(fs.readFileSync(there('package.json')).toString());
 
 if (fs.existsSync(there('tsconfig.json'))) {
   const tsConfig = JSON.parse('' + fs.readFileSync(there('tsconfig.json')));
@@ -40,10 +41,15 @@ interface Config {
   htmlStyleSheets?: string[];
 }
 
-async function replaceInFile(file: string, pattern: string, replacement: string)  {
-  const content = await fs.readFile(file);
+async function replaceInFile(file: string, replacements: Record<string, string>)  {
+  const buffer = await fs.readFile(file);
+  let content = buffer.toString();
 
-  return await fs.writeFile(file, String(content).replace(pattern, replacement));
+  Object.keys(replacements).forEach(key => {
+    content = content.replace(key, replacements[key]);
+  });
+
+  return await fs.writeFile(file, content);
 }
 
 async function templatizeIndex(config: Config) {
@@ -51,7 +57,15 @@ async function templatizeIndex(config: Config) {
     .join('\n')
   ;
 
-  return await replaceInFile(thereTmp('index.tsx'), '%topLevelImports%', imports);
+  const { name, version, description, keywords } = packageJSON;
+
+  return replaceInFile(
+    thereTmp('index.tsx'),
+    {
+      '%topLevelImports%': imports,
+      '%project-info%': JSON.stringify({name, version, description, keywords})
+    }
+  );
 }
 
 async function templatizeHtml(config: Config) {
@@ -59,7 +73,7 @@ async function templatizeHtml(config: Config) {
     .join('\n')
   ;
 
-  return await replaceInFile(thereTmp('index.html'), '%stylesheets%', stylesheets);
+  return replaceInFile(thereTmp('index.html'), {'%stylesheets%': stylesheets});
 }
 
 module.exports = async function(options: Args) {

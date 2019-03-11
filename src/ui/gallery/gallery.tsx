@@ -11,6 +11,13 @@ const ansiRegex = require('ansi-regex/index.js')();
 
 import './gallery.scss';
 
+interface ProjectInfo {
+  name: string;
+  version: string;
+  description: string;
+  keywords: string[];
+}
+
 export type Example = {
   label: string;
   path?: string[];
@@ -24,6 +31,8 @@ export interface GalleryState {
 }
 
 export class Gallery extends React.Component<{}, GalleryState> {
+  static projectInfo: ProjectInfo;
+
   static examples: Example[] = [];
 
   static add(example: {component: JSX.Element; path: string[]}) {
@@ -66,6 +75,23 @@ export class Gallery extends React.Component<{}, GalleryState> {
   constructor(props: {}, context: any) {
     super(props, context);
     this.state = {};
+
+    this.setTitle();
+  }
+
+  setTitle = () => {
+    const { exampleId } = this.state;
+
+    const example = exampleId ? this.getExampleForId(exampleId) : null;
+
+    const projectNameBits = Gallery.projectInfo.name.split('/');
+
+    const titleBits = [
+      projectNameBits[projectNameBits.length - 1] + '@' + Gallery.projectInfo.version,
+      example ? example.label : null
+    ];
+
+    window.document.title = titleBits.filter(Boolean).join(' | ');
   }
 
   componentDidMount() {
@@ -100,7 +126,7 @@ export class Gallery extends React.Component<{}, GalleryState> {
     const hash = window.location.hash.replace(/^#/, '');
     this.setState({
       exampleId: hash
-    });
+    }, this.setTitle);
   }
 
   selectItem = (item: Example) => {
@@ -131,8 +157,13 @@ export class Gallery extends React.Component<{}, GalleryState> {
     const { exampleId } = this.state;
 
     if (!exampleId) {
-      return <div className="main">
-        Nothing to show, move along.
+      const { name, description, keywords, version } = Gallery.projectInfo;
+      return <div className="main nothing-to-show">
+        <div className="vertically-centered">
+          <div className="name">{name}@{version}</div>
+          <div className="description">{description}</div>
+          <div className="keywords">{keywords.map((k, i) => <span key={i} className="keyword">{k}</span>)}</div>
+        </div>
       </div>;
     }
 

@@ -41,5 +41,38 @@
     }
   }
 
+  > .main.nothing-to-show {
+    text-align: center;
+
+    .vertically-centered {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .name {
+      color: $text-light;
+      margin-bottom: 20px;
+    }
+
+    .description {
+      font-size: 1.6em;
+      margin-bottom: 20px;
+    }
+
+    .keywords {
+      font-size: 0.8em;
+
+      .keyword {
+        margin: 15px;
+        // border: 1px solid $text-super-light;
+        // padding: 1px 7px 2px 7px;
+        color: $text-light;
+      }
+    }
+
+  }
+
   @import './section';
 }
