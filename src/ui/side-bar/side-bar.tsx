@@ -26,11 +26,15 @@ export interface SideBarState {
 }
 
 export class SideBar extends React.Component<SideBarProps, SideBarState> {
+  private selectedExampleRef: React.RefObject<HTMLDivElement>;
+
   constructor(props: SideBarProps, context: any) {
     super(props, context);
     this.state = {
       searchString: ''
     };
+
+    this.selectedExampleRef = React.createRef();
   }
 
   renderExamples() {
@@ -49,8 +53,9 @@ export class SideBar extends React.Component<SideBarProps, SideBarState> {
 
     return <div
       key={index}
-      className={classNames('example', {selected: selectedExample && selectedExample === example, deaf: hasChildren})}
+      className={classNames('example', {selected: selectedExample === example, deaf: hasChildren})}
       onClick={hasChildren ? null : () => onClick(example)}
+      ref={selectedExample === example ? this.selectedExampleRef : null}
     >
       <div
         className="label"
@@ -61,6 +66,16 @@ export class SideBar extends React.Component<SideBarProps, SideBarState> {
       {example.examples ? sort(example.examples).map((e, i) => this.renderExample(e, i, nestedness + 1)) : null}
 
     </div>;
+  }
+
+  componentDidUpdate() {
+    if (!this.selectedExampleRef) return;
+
+    const { top, bottom } = this.selectedExampleRef.current.getBoundingClientRect();
+
+    if (top < 0 || bottom > window.innerHeight) {
+      this.selectedExampleRef.current.scrollIntoView();
+    }
   }
 
   render() {
