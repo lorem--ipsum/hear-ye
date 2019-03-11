@@ -1,7 +1,9 @@
 .hy-gallery {
+  @import '../colors';
+
   $side-bar-width: 200px;
   $outer-padding: 5px;
-  $inner-color: #FAFAFB;
+  $inner-color: $main-super-light;
 
   position: absolute;
   left: 0;
@@ -9,7 +11,7 @@
   top: 0;
   bottom: 0;
 
-  background-color: #DADADA;
+  background-color: $main-light;
 
   > .hy-side-bar {
     position: absolute;
@@ -18,7 +20,7 @@
     top: $outer-padding;
     bottom: $outer-padding;
 
-    background-color: #F3F3F3;
+    background-color: $inner-color;
     border-radius: 1px;
   }
 

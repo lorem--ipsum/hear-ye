@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const MuskadPlugin = require('muskad/dist/webpack-plugin/muskad');
 
 const rootDir = require(path.resolve('./tsconfig.json')).compilerOptions.rootDir;
 
@@ -55,8 +56,7 @@ module.exports = {
                 declaration: false
               }
             }
-          },
-          {loader: 'import-glob-loader'}
+          }
         ]
       },
       {
@@ -101,6 +101,9 @@ module.exports = {
     pathinfo: false
   },
   plugins: [
+    new MuskadPlugin({
+      context: path.resolve('src')
+    }),
     new HtmlWebpackPlugin({
       template: '.tmp/index.html'
     }),

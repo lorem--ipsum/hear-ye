@@ -1,5 +1,7 @@
 .hy-side-bar {
+  @import '../colors';
   padding-top: 10px;
+  color: $text-dark;
 
   display: grid;
   grid-template-rows: 40px auto;
