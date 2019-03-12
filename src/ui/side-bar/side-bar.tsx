@@ -69,7 +69,7 @@ export class SideBar extends React.Component<SideBarProps, SideBarState> {
   }
 
   componentDidUpdate() {
-    if (!this.selectedExampleRef) return;
+    if (!this.selectedExampleRef.current) return;
 
     const { top, bottom } = this.selectedExampleRef.current.getBoundingClientRect();
 
