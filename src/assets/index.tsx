@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom';
 
 %topLevelImports%
 
-function importAll(r) {
+function importAll(r: any) {
   r.keys().forEach(r);
 }
 
