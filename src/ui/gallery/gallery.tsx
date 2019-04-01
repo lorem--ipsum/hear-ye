@@ -1,7 +1,5 @@
 import * as React from 'react';
 
-import { Normalize } from '@smooth-ui/core-sc';
-
 import { SideBar } from '../side-bar/side-bar';
 import { ExampleSummary } from '../example-summary/example-summary';
 import { ErrorOverlay } from '../error-overlay/error-overlay';
