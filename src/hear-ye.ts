@@ -32,6 +32,7 @@ async function cleanUp() {
 interface Args {
   once?: boolean;
   verbose?: boolean;
+  strict?: boolean;
   config?: string;
   noCleanup?: boolean;
 }
@@ -52,7 +53,7 @@ async function replaceInFile(file: string, replacements: Record<string, string>)
   return await fs.writeFile(file, content);
 }
 
-async function templatizeIndex(config: Config) {
+async function templatizeIndex(config: Config, options: Args) {
   const imports = (config.topLevelImports || [])
     .join('\n')
   ;
@@ -63,7 +64,8 @@ async function templatizeIndex(config: Config) {
     thereTmp('index.tsx'),
     {
       '%topLevelImports%': imports,
-      '%project-info%': JSON.stringify({name, version, description, keywords})
+      '%project-info%': JSON.stringify({name, version, description, keywords}),
+      '%options%': JSON.stringify({strict: options.strict})
     }
   );
 }
@@ -93,7 +95,7 @@ module.exports = async function(options: Args) {
 
   await fs.copy(here('assets'), thereTmp(''));
 
-  await templatizeIndex(config);
+  await templatizeIndex(config, options);
   await templatizeHtml(config);
 
   await fs.copy(thereTmp('index.html'), there('demo/index.html'));

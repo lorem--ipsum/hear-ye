@@ -1,8 +1,6 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
 
-import { Input } from '@smooth-ui/core-sc';
-
 import { Example } from '../gallery/gallery';
 
 require('./side-bar.scss');
@@ -84,9 +82,9 @@ export class SideBar extends React.Component<SideBarProps, SideBarState> {
 
     return <div className="hy-side-bar">
       <div className="search">
-        <Input
+        <input
+          className="search-input"
           placeholder="Search..."
-          size="sm"
           value={searchString}
           onChange={e => this.setState({searchString: (e.target as any).value})}
         />

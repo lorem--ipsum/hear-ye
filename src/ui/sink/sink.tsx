@@ -19,7 +19,7 @@ export class Sink extends React.Component<SinkProps, SinkState> {
     this.state = {};
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const { customCSS } = this.props;
 
     if (customCSS) this.attachCSS(customCSS);

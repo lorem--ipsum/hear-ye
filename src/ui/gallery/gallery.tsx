@@ -18,6 +18,10 @@ interface ProjectInfo {
   keywords: string[];
 }
 
+interface ProjectOptions {
+  strict: boolean;
+}
+
 export type Example = {
   label: string;
   path?: string[];
@@ -25,13 +29,14 @@ export type Example = {
   component?: JSX.Element;
 }
 
-export interface GalleryState {
+interface GalleryState {
   errors?: string[];
   exampleId?: string;
 }
 
 export class Gallery extends React.Component<{}, GalleryState> {
   static projectInfo: ProjectInfo;
+  static options: ProjectOptions;
 
   static examples: Example[] = [];
 
@@ -186,7 +191,7 @@ export class Gallery extends React.Component<{}, GalleryState> {
 
     const examples = Gallery.examples;
 
-    return <div className="hy-gallery">
+    const content = <div className="hy-gallery">
       <SideBar
         examples={examples}
         onClick={this.selectItem}
@@ -200,5 +205,11 @@ export class Gallery extends React.Component<{}, GalleryState> {
         : null
       }
     </div>;
+
+    if (!Gallery.options.strict) return content;
+
+    return <React.StrictMode>
+      {content}
+    </React.StrictMode>;
   }
 }

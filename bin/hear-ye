@@ -13,6 +13,12 @@ const argv = yargs
     type: 'boolean'
   })
 
+  .option('s', {
+    alias: 'strict',
+    default: false,
+    type: 'boolean'
+  })
+
   .option('n', {
     alias: 'no-cleanup',
     default: false,
