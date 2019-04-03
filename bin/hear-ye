@@ -13,8 +13,7 @@ const argv = yargs
     type: 'boolean'
   })
 
-  .option('s', {
-    alias: 'strict',
+  .option('tolerant', {
     default: false,
     type: 'boolean'
   })

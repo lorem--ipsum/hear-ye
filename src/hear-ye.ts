@@ -32,7 +32,7 @@ async function cleanUp() {
 interface Args {
   once?: boolean;
   verbose?: boolean;
-  strict?: boolean;
+  tolerant?: boolean;
   config?: string;
   noCleanup?: boolean;
 }
@@ -65,7 +65,7 @@ async function templatizeIndex(config: Config, options: Args) {
     {
       '%topLevelImports%': imports,
       '%project-info%': JSON.stringify({name, version, description, keywords}),
-      '%options%': JSON.stringify({strict: options.strict})
+      '%options%': JSON.stringify({strict: !options.tolerant})
     }
   );
 }
