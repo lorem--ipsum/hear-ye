@@ -10,10 +10,10 @@ const ansiRegex = require('ansi-regex/index.js')();
 import './gallery.scss';
 
 interface ProjectInfo {
-  name: string;
-  version: string;
-  description: string;
-  keywords: string[];
+  name?: string;
+  version?: string;
+  description?: string;
+  keywords?: string[];
 }
 
 interface ProjectOptions {
