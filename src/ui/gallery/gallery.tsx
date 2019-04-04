@@ -165,7 +165,7 @@ export class Gallery extends React.Component<{}, GalleryState> {
         <div className="vertically-centered">
           <div className="name">{name}@{version}</div>
           <div className="description">{description}</div>
-          <div className="keywords">{keywords.map((k, i) => <span key={i} className="keyword">{k}</span>)}</div>
+          {keywords ? <div className="keywords">{keywords.map((k, i) => <span key={i} className="keyword">{k}</span>)}</div> : null}
         </div>
       </div>;
     }
