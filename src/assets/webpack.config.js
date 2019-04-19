@@ -17,7 +17,7 @@ module.exports = {
     contentBase: path.resolve('demo'),
     port: 1234,
     hot: true,
-    publicPath: '/',
+    // publicPath: '/',
     historyApiFallback: true
   },
 
@@ -51,7 +51,6 @@ module.exports = {
           {
             loader: 'ts-loader',
             options: {
-              // transpileOnly: true,
               compilerOptions: {
                 declaration: false
               }
@@ -97,7 +96,6 @@ module.exports = {
   output: {
     filename: '[name].js',
     path: path.resolve('./demo'),
-    publicPath: '/',
     pathinfo: false
   },
   plugins: [

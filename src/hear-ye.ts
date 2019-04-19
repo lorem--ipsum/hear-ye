@@ -3,6 +3,9 @@ import * as path from 'path';
 import { spawn } from 'child_process';
 import hereAndThere from './utils/here-and-there';
 import * as fs from 'fs-extra';
+import * as ora from 'ora';
+import { args } from './options';
+const ghpages = require('gh-pages');
 
 const cwd = process.cwd();
 
@@ -33,6 +36,7 @@ interface Args {
   once?: boolean;
   verbose?: boolean;
   tolerant?: boolean;
+  publish?: boolean;
   config?: string;
   noCleanup?: boolean;
 }
@@ -65,7 +69,7 @@ async function templatizeIndex(config: Config, options: Args) {
     {
       '%topLevelImports%': imports,
       '%project-info%': JSON.stringify({name, version, description, keywords}),
-      '%options%': JSON.stringify({strict: !options.tolerant})
+      '%options%': JSON.stringify({strict: !options.tolerant, standalone: !!options.once})
     }
   );
 }
@@ -78,9 +82,7 @@ async function templatizeHtml(config: Config) {
   return replaceInFile(thereTmp('index.html'), {'%stylesheets%': stylesheets});
 }
 
-module.exports = async function(options: Args) {
-  const additionalArgs: string[] = [];
-
+function getConfig(options: {config: string}) {
   let config: Config = {};
 
   if (fs.existsSync(options.config)) {
@@ -93,22 +95,71 @@ module.exports = async function(options: Args) {
     }
   }
 
-  await fs.copy(here('assets'), thereTmp(''));
+  return config;
+}
 
+async function runOnce(options: {verbose: boolean, "no-cleanup": boolean}) {
+  const spinner = ora().start('Building...');
+
+  const additionalArgs: string[] = [];
+
+  if (options.verbose) additionalArgs.push('--display=verbose');
+  const webpack = spawn('webpack', ['--config', thereTmp('webpack.config.js'), ...additionalArgs], {stdio: 'inherit'});
+
+  return new Promise<number>((yes, no) => {
+    webpack.on('close', async code => {
+      if (options["no-cleanup"] !== true) await cleanUp();
+      if (code == 0) {
+        spinner.succeed();
+        yes(code);
+      } else {
+        spinner.fail();
+        no(code);
+      }
+    });
+  });
+}
+
+async function publish() {
+  const spinner = ora().start('Publishing...');
+
+  return new Promise<any>((yes, no) => {
+    ghpages.publish(there('demo'), {push: false}, (err: any) => {
+      if (err) {
+        spinner.fail();
+        no(err);
+      } else {
+        spinner.succeed('Published!');
+        yes();
+      }
+    });
+  });
+}
+
+module.exports = async function() {
+  const options = args().parse();
+
+  const config = getConfig(options);
+
+  await fs.copy(here('assets'), thereTmp(''));
   await templatizeIndex(config, options);
   await templatizeHtml(config);
-
   await fs.copy(thereTmp('index.html'), there('demo/index.html'));
 
   if (options.once) {
+    const code = await runOnce(options);
+    process.exit(code);
+    return;
+  }
 
-    if (options.verbose) additionalArgs.push('--display=verbose');
-    const webpack = spawn('webpack', ['--config', thereTmp('webpack.config.js'), ...additionalArgs], {stdio: 'inherit'});
+  if (options.publish) {
+    // const code = await runOnce(options);
 
-    webpack.on('close', async code => {
-      if (options.noCleanup !== true) await cleanUp();
-      process.exit(code);
-    });
+    // if (code == 0) {
+      await publish();
+    // }
+
+    process.exit(0);
 
     return;
   }

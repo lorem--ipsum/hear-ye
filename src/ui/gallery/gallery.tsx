@@ -18,6 +18,7 @@ interface ProjectInfo {
 
 interface ProjectOptions {
   strict: boolean;
+  standalone: boolean;
 }
 
 export type Example = {
@@ -102,6 +103,8 @@ export class Gallery extends React.Component<{}, GalleryState> {
 
     window.addEventListener('hashchange', this.onHashChange);
     this.onHashChange();
+
+    if (Gallery.options.standalone) return;
 
     socket('http://localhost:1234/sockjs-node', {
       errors: (_errors: string[]) => {

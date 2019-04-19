@@ -1,39 +1,5 @@
 #!/usr/bin/env node
 
-const yargs = require('yargs');
-
-const argv = yargs
-  .command('default', 'Watches and rebuilds demo if necessary')
-
-  .describe('once', 'Runs only once')
-
-  .option('v', {
-    alias: 'verbose',
-    default: false,
-    type: 'boolean'
-  })
-
-  .option('tolerant', {
-    default: false,
-    type: 'boolean'
-  })
-
-  .option('n', {
-    alias: 'no-cleanup',
-    default: false,
-    type: 'boolean'
-  })
-
-  .option('c', {
-    alias: 'config',
-    type: 'string'
-  })
-
-  .help('h')
-  .alias('h', 'help')
-
-  .argv;
-
 const hearYe = require('../dist/hear-ye.js');
 
-hearYe(argv);
+hearYe();
