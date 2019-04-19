@@ -27,7 +27,7 @@ export class ApiDoc extends React.Component<ApiDocProps, ApiDocState> {
       return;
     }
 
-    fetch('/muskad-doc.json')
+    fetch('muskad-doc.json')
       .then(r => r.json())
       .then(json => {
 
