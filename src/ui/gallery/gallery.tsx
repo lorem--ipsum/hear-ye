@@ -19,6 +19,7 @@ interface ProjectInfo {
 interface ProjectOptions {
   strict: boolean;
   standalone: boolean;
+  noNiceCss: boolean;
 }
 
 export type Example = {
@@ -192,7 +193,12 @@ export class Gallery extends React.Component<{}, GalleryState> {
 
     const examples = Gallery.examples;
 
-    const content = <div className="hy-gallery">
+    const classes = [
+      'hy-gallery',
+      Gallery.options.noNiceCss ? '' : 'nice'
+    ].filter(Boolean).join(' ');
+
+    const content = <div className={classes}>
       <SideBar
         examples={examples}
         onClick={this.selectItem}

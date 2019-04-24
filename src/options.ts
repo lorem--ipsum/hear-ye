@@ -4,10 +4,20 @@ export function args() {
   return yargs
     .command('default', 'Watches and rebuilds demo if necessary')
 
-    .describe('once', 'Runs only once')
+    .option('once', {
+      describe: 'Runs only once',
+      default: false,
+      type: 'boolean'
+    })
 
     .option('verbose', {
       alias: 'v',
+      default: false,
+      type: 'boolean'
+    })
+
+    .option('pure', {
+      describe: 'no sanity code added',
       default: false,
       type: 'boolean'
     })

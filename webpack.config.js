@@ -1,5 +1,6 @@
 const process = require('process');
 const CopyPlugin = require('copy-webpack-plugin');
+const nodeExternals = require('webpack-node-externals');
 
 module.exports = [
 {
@@ -33,7 +34,9 @@ module.exports = [
 
   node: {
     __dirname: false
-  }
+  },
+
+  externals: [nodeExternals()]
 },
 
 {

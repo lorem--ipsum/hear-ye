@@ -32,15 +32,6 @@ async function cleanUp() {
   return Promise.all(files.map(f => fs.remove(f)));
 }
 
-interface Args {
-  once?: boolean;
-  verbose?: boolean;
-  tolerant?: boolean;
-  publish?: boolean;
-  config?: string;
-  noCleanup?: boolean;
-}
-
 interface Config {
   topLevelImports?: string[];
   htmlStyleSheets?: string[];
@@ -57,8 +48,8 @@ async function replaceInFile(file: string, replacements: Record<string, string>)
   return await fs.writeFile(file, content);
 }
 
-async function templatizeIndex(config: Config, options: Args) {
-  const imports = (config.topLevelImports || [])
+async function templatizeIndex(config: Config, options: {tolerant: boolean, once: boolean, pure: boolean}) {
+  const imports = (config.topLevelImports || (options.pure ? [] : ["import '@implydata/css-sanity/css-sanity.min.css';"]))
     .join('\n')
   ;
 
@@ -69,15 +60,17 @@ async function templatizeIndex(config: Config, options: Args) {
     {
       '%topLevelImports%': imports,
       '%project-info%': JSON.stringify({name, version, description, keywords}),
-      '%options%': JSON.stringify({strict: !options.tolerant, standalone: !!options.once})
+      '%options%': JSON.stringify({strict: !options.tolerant, standalone: !!options.once, noNiceCss: !!options.pure})
     }
   );
 }
 
-async function templatizeHtml(config: Config) {
-  const stylesheets = (config.htmlStyleSheets || [])
-    .join('\n')
-  ;
+async function templatizeHtml(config: Config, options: {pure: boolean}) {
+  const stylesheets = (
+    config.htmlStyleSheets
+    ||
+    (options.pure ? [] : ["<link href=\"https://fonts.googleapis.com/css?family=Open+Sans:400,600\" rel=\"stylesheet\">"])
+  ).join('\n');
 
   return replaceInFile(thereTmp('index.html'), {'%stylesheets%': stylesheets});
 }
@@ -143,7 +136,7 @@ module.exports = async function() {
 
   await fs.copy(here('assets'), thereTmp(''));
   await templatizeIndex(config, options);
-  await templatizeHtml(config);
+  await templatizeHtml(config, options);
   await fs.copy(thereTmp('index.html'), there('demo/index.html'));
 
   if (options.once) {
