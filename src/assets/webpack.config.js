@@ -107,5 +107,9 @@ module.exports = {
       template: '.tmp/index.html'
     }),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
-  ]
+  ],
+
+  node: {
+    fs: "empty"
+  }
 };

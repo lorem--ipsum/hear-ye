@@ -8,26 +8,24 @@ export interface SinkProps extends React.Props<any> {
   noPadding?: boolean;
 }
 
-export interface SinkState {
-}
-
-export class Sink extends React.Component<SinkProps, SinkState> {
+export class Sink extends React.PureComponent<SinkProps, {}> {
   private css: HTMLStyleElement;
-
-  constructor(props: SinkProps, context: any) {
-    super(props, context);
-    this.state = {};
-  }
 
   componentDidMount() {
     const { customCSS } = this.props;
-
     if (customCSS) this.attachCSS(customCSS);
   }
 
   componentWillUnmount() {
     const { customCSS } = this.props;
-    if (customCSS) this.detachCSS(customCSS);
+    if (customCSS) this.detachCSS();
+  }
+
+  componentDidUpdate(prevProps: SinkProps) {
+    if (this.props === prevProps.customCSS) return;
+
+    this.detachCSS();
+    this.attachCSS(this.props.customCSS);
   }
 
   attachCSS(css: string) {
@@ -39,7 +37,7 @@ export class Sink extends React.Component<SinkProps, SinkState> {
     this.css = element;
   }
 
-  detachCSS(css: string) {
+  detachCSS() {
     if (!this.css) return;
 
     document.getElementsByTagName('head').item(0).removeChild(this.css);
