@@ -1,7 +1,11 @@
+// Auto-generated file
+
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
 %topLevelImports%
+
+if (!%options%.noNiceCss) require('./index.scss');
 
 function importAll(r: any) {
   r.keys().forEach(r);

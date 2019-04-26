@@ -13,12 +13,6 @@
 
   background-color: $main-light;
 
-  &.nice {
-    font-size: 13px;
-    box-sizing: border-box;
-    font-family: 'Open Sans', sans-serif;
-  }
-
   > .hy-side-bar {
     position: absolute;
     left: $outer-padding;

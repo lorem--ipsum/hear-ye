@@ -1,6 +1,10 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
+import { Icon } from '../icon/icon';
+import { basic_folder } from 'react-icons-kit/linea/basic_folder';
+import { arrows_keyboard_right } from 'react-icons-kit/linea/arrows_keyboard_right';
 
+import { Deprecated } from '../deprecated/deprecated';
 import { Example } from '../gallery/gallery';
 
 require('./side-bar.scss');
@@ -57,8 +61,11 @@ export class SideBar extends React.Component<SideBarProps, SideBarState> {
     >
       <div
         className="label"
-        style={{paddingLeft: nestedness*20 + 10}}
-      >{example.label}
+        style={{paddingLeft: nestedness * 20 + 20}}
+      >
+        <Icon size={15} icon={example.examples ? basic_folder : arrows_keyboard_right}/>
+        <div className="label-content">{example.label}</div>
+        {example.deprecated ? <Deprecated/> : null}
       </div>
 
       {example.examples ? sort(example.examples).map((e, i) => this.renderExample(e, i, nestedness + 1)) : null}

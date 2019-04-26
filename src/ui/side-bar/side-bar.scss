@@ -34,6 +34,21 @@
 
       > .label {
         padding: 10px;
+
+        > .hy-icon {
+          left: -6px;
+        }
+
+        > .label-content {
+          display: inline-block;
+          top: 2px;
+        }
+
+        > .hy-deprecated {
+          position: absolute;
+          right: 10px;
+          top: 10px;
+        }
       }
 
       &:hover, &.hover {

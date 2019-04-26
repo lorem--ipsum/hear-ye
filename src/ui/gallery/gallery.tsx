@@ -24,6 +24,7 @@ interface ProjectOptions {
 
 export type Example = {
   label: string;
+  deprecated?: boolean;
   path?: string[];
   examples?: Example[];
   component?: JSX.Element;
@@ -40,7 +41,7 @@ export class Gallery extends React.Component<{}, GalleryState> {
 
   static examples: Example[] = [];
 
-  static add(example: {component: JSX.Element; path: string[]}) {
+  static add(example: {component: JSX.Element; path: string[]; deprecated?: boolean}) {
     const { path } = example;
 
     const p = path.map(p => p.replace(/\/+/, ' '));
@@ -57,14 +58,16 @@ export class Gallery extends React.Component<{}, GalleryState> {
           examples.push({
             label: _p,
             path,
-            component: example.component
+            component: example.component,
+            deprecated: example.deprecated
           });
           break;
 
         } else {
           examples.push({
             label: _p,
-            examples: [] as Example[]
+            examples: [] as Example[],
+            deprecated: example.deprecated
           });
 
           examples = examples[examples.length - 1].examples;
@@ -193,12 +196,7 @@ export class Gallery extends React.Component<{}, GalleryState> {
 
     const examples = Gallery.examples;
 
-    const classes = [
-      'hy-gallery',
-      Gallery.options.noNiceCss ? '' : 'nice'
-    ].filter(Boolean).join(' ');
-
-    const content = <div className={classes}>
+    const content = <div className="hy-gallery">
       <SideBar
         examples={examples}
         onClick={this.selectItem}

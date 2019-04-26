@@ -5,7 +5,6 @@ import hereAndThere from './utils/here-and-there';
 import * as fs from 'fs-extra';
 import * as ora from 'ora';
 import { args } from './options';
-const ghpages = require('gh-pages');
 
 const cwd = process.cwd();
 
@@ -42,7 +41,7 @@ async function replaceInFile(file: string, replacements: Record<string, string>)
   let content = buffer.toString();
 
   Object.keys(replacements).forEach(key => {
-    content = content.replace(key, replacements[key]);
+    content = content.replace(new RegExp(key, 'g'), replacements[key]);
   });
 
   return await fs.writeFile(file, content);
@@ -72,7 +71,14 @@ async function templatizeHtml(config: Config, options: {pure: boolean}) {
     (options.pure ? [] : ["<link href=\"https://fonts.googleapis.com/css?family=Open+Sans:400,600\" rel=\"stylesheet\">"])
   ).join('\n');
 
-  return replaceInFile(thereTmp('index.html'), {'%stylesheets%': stylesheets});
+  return replaceInFile(thereTmp('index.html'), {
+    '%stylesheets%': stylesheets,
+    '%niceCss%': `
+      font-size: 13px;
+      box-sizing: border-box;
+      font-family: 'Open Sans', sans-serif;
+    `
+  });
 }
 
 function getConfig(options: {config: string}) {
@@ -113,22 +119,6 @@ async function runOnce(options: {verbose: boolean, "no-cleanup": boolean}) {
   });
 }
 
-async function publish() {
-  const spinner = ora().start('Publishing...');
-
-  return new Promise<any>((yes, no) => {
-    ghpages.publish(there('demo'), {push: false}, (err: any) => {
-      if (err) {
-        spinner.fail();
-        no(err);
-      } else {
-        spinner.succeed('Published!');
-        yes();
-      }
-    });
-  });
-}
-
 module.exports = async function() {
   const options = args().parse();
 
@@ -142,18 +132,6 @@ module.exports = async function() {
   if (options.once) {
     const code = await runOnce(options);
     process.exit(code);
-    return;
-  }
-
-  if (options.publish) {
-    // const code = await runOnce(options);
-
-    // if (code == 0) {
-      await publish();
-    // }
-
-    process.exit(0);
-
     return;
   }
 
