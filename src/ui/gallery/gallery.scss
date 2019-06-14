@@ -66,9 +66,24 @@
 
       .keyword {
         margin: 15px;
-        // border: 1px solid $text-super-light;
-        // padding: 1px 7px 2px 7px;
         color: $text-light;
+      }
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 5px;
+      left: 50%;
+      transform: translate(-50%, 0);
+      font-size: 10px;
+      color: #b7b7b7;
+
+      cursor: pointer;
+      // border-bottom: 1px solid transparent;
+
+      &:hover {
+        color: #5B8FFD;
+        text-decoration: underline;
       }
     }
 

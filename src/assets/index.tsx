@@ -15,7 +15,13 @@ importAll((require as any).context('../', true, /\.demo\.tsx$/));
 
 import { Gallery } from 'hear-ye';
 
-Gallery.projectInfo = %project-info%;
-Gallery.options = %options%;
-
-ReactDOM.render(React.createElement(Gallery), document.getElementsByClassName('hy-container')[0]);
+ReactDOM.render(
+  <Gallery
+    projectInfo={%project-info%}
+    strict={%options%.strict}
+    standalone={%options%.standalone}
+    noNiceCss={%options%.noNiceCss}
+    hearYeVersion="%version%"
+  />,
+  document.getElementsByClassName('hy-container')[0]
+);

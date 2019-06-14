@@ -12,6 +12,7 @@ const { here, there } = hereAndThere(cwd, __dirname);
 
 let thereTmp = (str: string) => there(str);
 
+const hearYeVersion = JSON.parse(fs.readFileSync(here('../package.json')).toString()).version;
 const packageJSON: any = JSON.parse(fs.readFileSync(there('package.json')).toString());
 
 if (fs.existsSync(there('tsconfig.json'))) {
@@ -59,7 +60,8 @@ async function templatizeIndex(config: Config, options: {tolerant: boolean, once
     {
       '%topLevelImports%': imports,
       '%project-info%': JSON.stringify({name, version, description, keywords}),
-      '%options%': JSON.stringify({strict: !options.tolerant, standalone: !!options.once, noNiceCss: !!options.pure})
+      '%options%': JSON.stringify({strict: !options.tolerant, standalone: !!options.once, noNiceCss: !!options.pure}),
+      '%version%': hearYeVersion
     }
   );
 }

@@ -14,7 +14,11 @@ interface ProjectInfo {
   keywords?: string[];
 }
 
-interface ProjectOptions {
+
+interface GalleryProps {
+  projectInfo: ProjectInfo;
+  hearYeVersion: string;
+
   strict: boolean;
   standalone: boolean;
   noNiceCss: boolean;
@@ -25,10 +29,7 @@ interface GalleryState {
   quickSearchVisible?: boolean;
 }
 
-export class Gallery extends React.Component<{}, GalleryState> {
-  static projectInfo: ProjectInfo;
-  static options: ProjectOptions;
-
+export class Gallery extends React.Component<GalleryProps, GalleryState> {
   static examples: Example[] = [];
 
   static add(example: {component: JSX.Element; path: string[]; deprecated?: boolean}) {
@@ -70,7 +71,7 @@ export class Gallery extends React.Component<{}, GalleryState> {
 
   private mounted: boolean;
 
-  constructor(props: {}, context: any) {
+  constructor(props: GalleryProps, context: any) {
     super(props, context);
     this.state = {};
 
@@ -78,14 +79,15 @@ export class Gallery extends React.Component<{}, GalleryState> {
   }
 
   setTitle = () => {
+    const { projectInfo } = this.props;
     const { exampleId } = this.state;
 
     const example = exampleId ? this.getExampleForId(exampleId) : null;
 
-    const projectNameBits = Gallery.projectInfo.name.split('/');
+    const projectNameBits = projectInfo.name.split('/');
 
     const titleBits = [
-      projectNameBits[projectNameBits.length - 1] + '@' + Gallery.projectInfo.version,
+      projectNameBits[projectNameBits.length - 1] + '@' + projectInfo.version,
       example ? example.label : null
     ];
 
@@ -150,16 +152,18 @@ export class Gallery extends React.Component<{}, GalleryState> {
   }
 
   renderMain() {
+    const { projectInfo, hearYeVersion } = this.props;
     const { exampleId } = this.state;
 
     if (!exampleId) {
-      const { name, description, keywords, version } = Gallery.projectInfo;
+      const { name, description, keywords, version } = projectInfo;
       return <div className="main nothing-to-show">
         <div className="vertically-centered">
           <div className="name">{name}@{version}</div>
           <div className="description">{description}</div>
           {keywords ? <div className="keywords">{keywords.map((k, i) => <span key={i} className="keyword">{k}</span>)}</div> : null}
         </div>
+        <a href="https://github.com/lorem--ipsum/hear-ye" target="_blank" className="footer">Powered by hear-ye@{hearYeVersion}</a>
       </div>;
     }
 
@@ -178,6 +182,7 @@ export class Gallery extends React.Component<{}, GalleryState> {
   }
 
   render() {
+    const { strict } = this.props;
     const { exampleId, quickSearchVisible } = this.state;
 
     const openExample = (example: Example) => {
@@ -202,7 +207,7 @@ export class Gallery extends React.Component<{}, GalleryState> {
       { quickSearchVisible && <QuickSearch examples={examples} onSelect={openExample}/> }
     </div>;
 
-    if (!Gallery.options.strict) return content;
+    if (!strict) return content;
 
     return <React.StrictMode>
       {content}

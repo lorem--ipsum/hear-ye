@@ -1,72 +1,51 @@
 .hy-side-bar {
   @import '../colors';
-  padding-top: 10px;
+  padding: 5px 0;
   color: $text-dark;
 
-  display: grid;
-  grid-template-rows: 40px auto;
+  overflow: auto;
 
-  .search {
-    text-align: center;
-    grid-row-start: 1;
-    grid-row-end: 1;
-    padding: 0 10px;
+  .example,
+  .example-folder {
+    cursor: pointer;
 
-    > input {
-      width: 100%;
-      height: 30px;
-      padding: 0 5px 0 5px;
+    > .label {
+      padding: 10px;
+
+      > .hy-icon {
+        left: -6px;
+      }
+
+      > .label-content {
+        display: inline-block;
+        top: 2px;
+      }
+
+      > .hy-deprecated {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+      }
     }
   }
 
-  .examples {
-    grid-row-start: 2;
-    grid-row-end: 2;
-
-    overflow: auto;
-
-    .example,
-    .example-folder {
-      cursor: pointer;
-
-      > .label {
-        padding: 10px;
-
-        > .hy-icon {
-          left: -6px;
-        }
-
-        > .label-content {
-          display: inline-block;
-          top: 2px;
-        }
-
-        > .hy-deprecated {
-          position: absolute;
-          right: 10px;
-          top: 10px;
-        }
-      }
-    }
-
-    .example {
-      &:hover, &.hover {
-        &:not(.deaf):not(.selected) {
-          background-color: #b1caff;
-        }
-      }
-
-      &.selected {
-        cursor: initial;
-        background-color: #5B8FFD;
-        color: white;
-      }
-    }
-
-    .example-folder:hover {
-      > .label {
+  .example {
+    &:hover, &.hover {
+      &:not(.deaf):not(.selected) {
         background-color: #b1caff;
       }
+    }
+
+    &.selected {
+      cursor: initial;
+      background-color: #5B8FFD;
+      color: white;
+    }
+  }
+
+  .example-folder:hover {
+    > .label {
+      background-color: #b1caff;
     }
   }
 

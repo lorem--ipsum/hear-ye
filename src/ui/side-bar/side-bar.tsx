@@ -18,35 +18,19 @@ function sort(examples: Example[]) {
   });
 }
 
-export interface SideBarProps extends React.Props<any> {
+interface SideBarProps extends React.Props<any> {
   examples: Example[];
   onClick: (example: Example) => void;
   selectedExample?: Example;
 }
 
-export interface SideBarState {
-  searchString?: string;
-}
-
-export class SideBar extends React.Component<SideBarProps, SideBarState> {
+export class SideBar extends React.Component<SideBarProps, {}> {
   private selectedExampleRef: React.RefObject<HTMLDivElement>;
 
   constructor(props: SideBarProps, context: any) {
     super(props, context);
-    this.state = {
-      searchString: ''
-    };
 
     this.selectedExampleRef = React.createRef();
-  }
-
-  renderExamples() {
-    const { examples, onClick } = this.props;
-    const { searchString } = this.state;
-
-    return sort(examples)
-      .filter(e => searchString ? e.label.toLowerCase().includes(searchString.toLowerCase()) : true)
-      .map((e, i) => this.renderExample(e, i, 0));
   }
 
   renderExample = (example: Example, index: number, level: number) => {
@@ -93,20 +77,9 @@ export class SideBar extends React.Component<SideBarProps, SideBarState> {
 
   render() {
     const { examples } = this.props;
-    const { searchString } = this.state;
 
     return <div className="hy-side-bar">
-      <div className="search">
-        <input
-          className="search-input"
-          placeholder="Search..."
-          value={searchString}
-          onChange={e => this.setState({searchString: (e.target as any).value})}
-        />
-      </div>
-      <div className="examples">
-        {this.renderExamples()}
-      </div>
+      { sort(examples).map((e, i) => this.renderExample(e, i, 0)) }
     </div>;
   }
 }
