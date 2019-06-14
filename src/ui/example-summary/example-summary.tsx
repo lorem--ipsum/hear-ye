@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as classNames from 'classnames';
 
 import { Deprecated } from '../deprecated/deprecated';
-import { Example } from '../gallery/gallery';
+import { Example } from '../models';
 
 require('./example-summary.scss');
 

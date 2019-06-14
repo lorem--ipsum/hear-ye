@@ -1,0 +1,61 @@
+/*
+ * Copyright (c) 2019 Imply Data, Inc. All rights reserved.
+ *
+ * This software is the confidential and proprietary information
+ * of Imply Data, Inc.
+ */
+
+.quick-search {
+  background-color: white;
+  border: 1px solid #CFD0CF;
+  position: absolute;
+  top: 20px;
+  max-height: calc(100% - 40px);
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 400px;
+  z-index: 1000000;
+  box-shadow: 0px 0px 4px 0px #e0e0e0;
+  padding: 5px 0px;
+
+  display: grid;
+  grid-gap: 5px;
+  grid-template-columns: auto;
+  grid-template-rows: 30px 1fr;
+  grid-template-areas:
+    "search"
+    "examples";
+
+  .search-input {
+    grid-area: search;
+    margin: 0 5px;
+  }
+
+  .examples {
+    overflow: auto;
+    grid-area: examples;
+
+    .example {
+      cursor: pointer;
+      padding: 10px 5px;
+
+      .label {
+
+      }
+
+      .path {
+        font-size: 11px;
+        color: #848484;
+      }
+
+      &:hover, &.active {
+        background-color: #5B8FFD;
+        color: white;
+
+        .path {
+          color: white;
+        }
+      }
+    }
+  }
+}

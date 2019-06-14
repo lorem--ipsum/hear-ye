@@ -2,6 +2,8 @@ import * as React from 'react';
 
 import { SideBar } from '../side-bar/side-bar';
 import { ExampleSummary } from '../example-summary/example-summary';
+import { QuickSearch } from '../quick-search/quick-search';
+import { Example } from '../models';
 
 import './gallery.scss';
 
@@ -18,16 +20,9 @@ interface ProjectOptions {
   noNiceCss: boolean;
 }
 
-export type Example = {
-  label: string;
-  deprecated?: boolean;
-  path?: string[];
-  examples?: Example[];
-  component?: JSX.Element;
-}
-
 interface GalleryState {
   exampleId?: string;
+  quickSearchVisible?: boolean;
 }
 
 export class Gallery extends React.Component<{}, GalleryState> {
@@ -101,12 +96,26 @@ export class Gallery extends React.Component<{}, GalleryState> {
     this.mounted = true;
 
     window.addEventListener('hashchange', this.onHashChange);
+    window.addEventListener('keydown', this.onKeyDown);
     this.onHashChange();
   }
 
   componentWillUnmount() {
     window.removeEventListener('hashchange', this.onHashChange);
+    window.removeEventListener('keydown', this.onKeyDown);
     this.mounted = false;
+  }
+
+  onKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'O' && event.metaKey && event.shiftKey) {
+      this.setState({
+        quickSearchVisible: true
+      });
+    } else if (event.key === 'Escape') {
+      this.setState({
+        quickSearchVisible: false
+      });
+    }
   }
 
   onHashChange = () => {
@@ -116,7 +125,7 @@ export class Gallery extends React.Component<{}, GalleryState> {
     }, this.setTitle);
   }
 
-  selectItem = (item: Example) => {
+  goToExample = (item: Example) => {
     const url = item.path.map(encodeURI).join('/');
 
     window.location.hash = url;
@@ -169,18 +178,28 @@ export class Gallery extends React.Component<{}, GalleryState> {
   }
 
   render() {
-    const { exampleId } = this.state;
+    const { exampleId, quickSearchVisible } = this.state;
+
+    const openExample = (example: Example) => {
+      this.setState({
+        quickSearchVisible: false
+      });
+
+      this.goToExample(example);
+    }
 
     const examples = Gallery.examples;
 
     const content = <div className="hy-gallery">
       <SideBar
         examples={examples}
-        onClick={this.selectItem}
+        onClick={this.goToExample}
         selectedExample={this.getExampleForId(exampleId)}
       />
 
       { this.renderMain() }
+
+      { quickSearchVisible && <QuickSearch examples={examples} onSelect={openExample}/> }
     </div>;
 
     if (!Gallery.options.strict) return content;

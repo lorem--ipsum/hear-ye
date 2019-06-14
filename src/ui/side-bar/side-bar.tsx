@@ -4,8 +4,9 @@ import { Icon } from '../icon/icon';
 import { arrows_keyboard_right } from 'react-icons-kit/linea/arrows_keyboard_right';
 
 import { Deprecated } from '../deprecated/deprecated';
-import { Example } from '../gallery/gallery';
 import { ExampleFolder } from './example-folder';
+
+import { Example } from '../models';
 
 require('./side-bar.scss');
 
