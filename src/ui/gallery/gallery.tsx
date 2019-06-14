@@ -2,10 +2,6 @@ import * as React from 'react';
 
 import { SideBar } from '../side-bar/side-bar';
 import { ExampleSummary } from '../example-summary/example-summary';
-import { ErrorOverlay } from '../error-overlay/error-overlay';
-
-const socket = require('webpack-dev-server/client/socket.js');
-const ansiRegex = require('ansi-regex/index.js')();
 
 import './gallery.scss';
 
@@ -31,7 +27,6 @@ export type Example = {
 }
 
 interface GalleryState {
-  errors?: string[];
   exampleId?: string;
 }
 
@@ -107,24 +102,6 @@ export class Gallery extends React.Component<{}, GalleryState> {
 
     window.addEventListener('hashchange', this.onHashChange);
     this.onHashChange();
-
-    if (Gallery.options.standalone) return;
-
-    socket('http://localhost:1234/sockjs-node', {
-      errors: (_errors: string[]) => {
-        if (!this.mounted) return;
-        this.setState({
-          errors: _errors.map(str => str.replace(ansiRegex, ''))
-        });
-      },
-      ok: () => {
-        if (!this.mounted) return;
-        this.setState({
-          errors: null
-        });
-      },
-      close: () => {}
-    });
   }
 
   componentWillUnmount() {
@@ -192,7 +169,7 @@ export class Gallery extends React.Component<{}, GalleryState> {
   }
 
   render() {
-    const { errors, exampleId } = this.state;
+    const { exampleId } = this.state;
 
     const examples = Gallery.examples;
 
@@ -204,11 +181,6 @@ export class Gallery extends React.Component<{}, GalleryState> {
       />
 
       { this.renderMain() }
-      {
-        errors
-        ? <ErrorOverlay errors={errors}/>
-        : null
-      }
     </div>;
 
     if (!Gallery.options.strict) return content;

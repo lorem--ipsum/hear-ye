@@ -1,11 +1,11 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
 import { Icon } from '../icon/icon';
-import { basic_folder } from 'react-icons-kit/linea/basic_folder';
 import { arrows_keyboard_right } from 'react-icons-kit/linea/arrows_keyboard_right';
 
 import { Deprecated } from '../deprecated/deprecated';
 import { Example } from '../gallery/gallery';
+import { ExampleFolder } from './example-folder';
 
 require('./side-bar.scss');
 
@@ -48,29 +48,36 @@ export class SideBar extends React.Component<SideBarProps, SideBarState> {
       .map((e, i) => this.renderExample(e, i, 0));
   }
 
-  renderExample = (example: Example, index: number, nestedness: number) => {
+  renderExample = (example: Example, index: number, level: number) => {
     const { onClick, selectedExample} = this.props;
 
     const hasChildren = example.examples && example.examples.length > 0;
 
-    return <div
-      key={index}
-      className={classNames('example', {selected: selectedExample === example, deaf: hasChildren})}
-      onClick={hasChildren ? null : () => onClick(example)}
-      ref={selectedExample === example ? this.selectedExampleRef : null}
-    >
-      <div
-        className="label"
-        style={{paddingLeft: nestedness * 20 + 20}}
+    if (!hasChildren) {
+      return <div
+        className={classNames('example', {selected: selectedExample === example})}
+        onClick={() => onClick(example)}
+        ref={selectedExample === example ? this.selectedExampleRef : null}
+        key={index}
       >
-        <Icon size={15} icon={example.examples ? basic_folder : arrows_keyboard_right}/>
-        <div className="label-content">{example.label}</div>
-        {example.deprecated ? <Deprecated/> : null}
-      </div>
+        <div className="label" style={{paddingLeft: level * 10 + 20}}>
+          <Icon size={15} icon={arrows_keyboard_right}/>
+          <div className="label-content">{example.label}</div>
+          {example.deprecated ? <Deprecated/> : null}
+        </div>
+      </div>;
+    }
 
-      {example.examples ? sort(example.examples).map((e, i) => this.renderExample(e, i, nestedness + 1)) : null}
+    return <ExampleFolder
+      key={index}
+      label={example.label}
+      className="example-folder"
+      level={level}
+      open={selectedExample && selectedExample.path[level] === example.label}
+    >
+      {sort(example.examples).map((e, i) => this.renderExample(e, i, level + 1))}
 
-    </div>;
+    </ExampleFolder>;
   }
 
   componentDidUpdate() {

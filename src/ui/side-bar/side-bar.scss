@@ -25,12 +25,9 @@
 
     overflow: auto;
 
-    .example {
+    .example,
+    .example-folder {
       cursor: pointer;
-
-      &.deaf {
-        cursor: initial;
-      }
 
       > .label {
         padding: 10px;
@@ -50,19 +47,26 @@
           top: 10px;
         }
       }
+    }
 
+    .example {
       &:hover, &.hover {
         &:not(.deaf):not(.selected) {
-          background-color: lightgrey;
+          background-color: #b1caff;
         }
       }
 
       &.selected {
         cursor: initial;
-        background-color: darkgrey;
+        background-color: #5B8FFD;
         color: white;
       }
+    }
 
+    .example-folder:hover {
+      > .label {
+        background-color: #b1caff;
+      }
     }
   }
 
