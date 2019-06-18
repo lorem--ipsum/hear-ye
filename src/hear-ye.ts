@@ -105,7 +105,7 @@ async function runOnce(options: {verbose: boolean, "no-cleanup": boolean}) {
   const additionalArgs: string[] = [];
 
   if (options.verbose) additionalArgs.push('--display=verbose');
-  const webpack = spawn('webpack', ['--config', thereTmp('webpack.config.js'), ...additionalArgs], {stdio: 'inherit'});
+  const webpack = spawn('webpack', ['-p', '--config', thereTmp('webpack.config.js'), ...additionalArgs], {stdio: 'inherit'});
 
   return new Promise<number>((yes, no) => {
     webpack.on('close', async code => {

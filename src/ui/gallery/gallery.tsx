@@ -109,11 +109,13 @@ export class Gallery extends React.Component<GalleryProps, GalleryState> {
   }
 
   onKeyDown = (event: KeyboardEvent) => {
-    if (event.key === 'O' && event.metaKey && event.shiftKey) {
+    console.log(event)
+
+    if (event.keyCode === 79 && event.metaKey && event.shiftKey) { // cmd + shift + o
       this.setState({
         quickSearchVisible: true
       });
-    } else if (event.key === 'Escape') {
+    } else if (event.keyCode === 27) { // Escape
       this.setState({
         quickSearchVisible: false
       });
