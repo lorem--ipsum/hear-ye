@@ -1,6 +1,6 @@
 import classNames from 'classnames';
-import React from 'react';
 import Fuse from 'fuse.js';
+import React from 'react';
 
 import { Example } from '../models';
 

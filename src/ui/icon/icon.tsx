@@ -1,5 +1,5 @@
-import { Icon as RIcon, IconProp } from 'react-icons-kit';
 import React from 'react';
+import { Icon as RIcon, IconProp } from 'react-icons-kit';
 
 require('./icon.scss');
 

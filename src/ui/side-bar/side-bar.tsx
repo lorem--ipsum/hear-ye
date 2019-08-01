@@ -1,12 +1,12 @@
-import React from 'react';
 import classNames from 'classnames';
-import { Icon } from '../icon/icon';
+import React from 'react';
 import { arrows_keyboard_right } from 'react-icons-kit/linea/arrows_keyboard_right';
 
 import { Deprecated } from '../deprecated/deprecated';
-import { ExampleFolder } from './example-folder';
-
+import { Icon } from '../icon/icon';
 import { Example } from '../models';
+
+import { ExampleFolder } from './example-folder';
 
 require('./side-bar.scss');
 

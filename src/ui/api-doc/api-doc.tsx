@@ -1,8 +1,8 @@
 require('./api-doc.scss');
 
-import React from 'react';
 import classNames from 'classnames';
 import { InterfaceApi, Property, PropertyUsage } from 'muskad';
+import React from 'react';
 
 export interface ApiDocProps extends React.Props<any> {
   interfaceName: string;

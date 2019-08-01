@@ -1,7 +1,5 @@
-require('./sink.scss');
-
-import React from 'react';
 import classNames from 'classnames';
+import React from 'react';
 
 export interface SinkProps extends React.Props<any> {
   customCSS?: string;
@@ -31,7 +29,7 @@ export class Sink extends React.PureComponent<SinkProps, {}> {
   attachCSS(css: string | undefined) {
     if (!css) return;
 
-    var element = document.createElement('style');
+    const element = document.createElement('style');
     element.setAttribute('type', 'text/css');
     element.innerHTML = css;
 

@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { SideBar } from '../side-bar/side-bar';
 import { ExampleSummary } from '../example-summary/example-summary';
-import { QuickSearch } from '../quick-search/quick-search';
 import { Example } from '../models';
+import { QuickSearch } from '../quick-search/quick-search';
+import { SideBar } from '../side-bar/side-bar';
 
 import './gallery.scss';
 

@@ -1,6 +1,5 @@
-import React from 'react';
 import classNames from 'classnames';
-
+import React from 'react';
 import { basic_folder } from 'react-icons-kit/linea/basic_folder';
 
 import { Icon } from '../icon/icon';

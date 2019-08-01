@@ -1,10 +1,11 @@
-import process from 'process';
-import path from 'path';
 import { spawn } from 'child_process';
-import hereAndThere from './utils/here-and-there';
 import fs from 'fs-extra';
 import ora from 'ora';
+import path from 'path';
+import process from 'process';
+
 import { args } from './options';
+import hereAndThere from './utils/here-and-there';
 
 const cwd = process.cwd();
 
@@ -120,7 +121,7 @@ async function runOnce(options: { verbose: boolean; 'no-cleanup': boolean }) {
   return new Promise<number>((yes, no) => {
     webpack.on('close', async code => {
       if (options['no-cleanup'] !== true) await cleanUp();
-      if (code == 0) {
+      if (code === 0 || code === '0') {
         spinner.succeed();
         yes(code);
       } else {
