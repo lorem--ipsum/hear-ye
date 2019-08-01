@@ -1,6 +1,6 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
-import * as Fuse from 'fuse.js';
+import classNames from 'classnames';
+import React from 'react';
+import Fuse from 'fuse.js';
 
 import { Example } from '../models';
 
@@ -12,15 +12,15 @@ interface QuickSearchProps extends React.Props<any> {
 }
 
 interface QuickSearchState {
-  flatExamples?: Example[];
-  searchString?: string;
-  hoveredIndex?: number;
+  flatExamples: Example[];
+  searchString: string;
+  hoveredIndex: number;
 }
 
 function flatten(examples: Example[]) {
   const flatExamples: Example[] = [];
 
-  for (let i  = 0; i < examples.length; i++) {
+  for (let i = 0; i < examples.length; i++) {
     const e = examples[i];
 
     if (!e.examples) {
@@ -36,19 +36,20 @@ function flatten(examples: Example[]) {
 export class QuickSearch extends React.PureComponent<QuickSearchProps, QuickSearchState> {
   static getDerivedStateFromProps(props: QuickSearchProps) {
     return {
-      flatExamples: flatten(props.examples)
-    }
+      flatExamples: flatten(props.examples),
+    };
   }
 
   private input = React.createRef<HTMLInputElement>();
   private examplesContainer = React.createRef<HTMLDivElement>();
-  private mounted: boolean;
+  private mounted = false;
 
   constructor(props: QuickSearchProps, context: any) {
     super(props, context);
     this.state = {
+      flatExamples: [],
       searchString: '',
-      hoveredIndex: -1
+      hoveredIndex: -1,
     };
   }
 
@@ -59,7 +60,7 @@ export class QuickSearch extends React.PureComponent<QuickSearchProps, QuickSear
 
     const fuse = new Fuse(flatExamples, {
       keys: ['label', 'path'],
-      threshold: 0.5
+      threshold: 0.5,
     });
 
     return fuse.search(searchString);
@@ -67,20 +68,22 @@ export class QuickSearch extends React.PureComponent<QuickSearchProps, QuickSear
 
   renderExamples() {
     const { onSelect } = this.props;
-    const { searchString, hoveredIndex } = this.state;
+    const { hoveredIndex } = this.state;
 
     const examples = this.getFilteredExamples();
 
     return examples.map((e, i) => {
-      return <div
-        className={classNames('example', {active: i === hoveredIndex})}
-        key={e.path.join('/')}
-        onClick={() => onSelect(e)}
-      >
-        <div className="label">{e.label}</div>
-        <div className="path">{e.path.join(' > ')}</div>
-      </div>;
-    })
+      return (
+        <div
+          className={classNames('example', { active: i === hoveredIndex })}
+          key={e.path.join('/')}
+          onClick={() => onSelect(e)}
+        >
+          <div className="label">{e.label}</div>
+          <div className="path">{e.path.join(' > ')}</div>
+        </div>
+      );
+    });
   }
 
   componentDidMount() {
@@ -101,7 +104,7 @@ export class QuickSearch extends React.PureComponent<QuickSearchProps, QuickSear
 
     if (hoveredIndex >= 0 && this.examplesContainer.current) {
       const exampleToScrollTo = this.examplesContainer.current.children[hoveredIndex];
-      if (exampleToScrollTo) exampleToScrollTo.scrollIntoView({block: 'center'});
+      if (exampleToScrollTo) exampleToScrollTo.scrollIntoView({ block: 'center' });
     }
   }
 
@@ -117,7 +120,7 @@ export class QuickSearch extends React.PureComponent<QuickSearchProps, QuickSear
       return;
     }
 
-    let newHoveredIndex: number;
+    let newHoveredIndex: number | undefined;
 
     if (event.key === 'ArrowDown') {
       newHoveredIndex = hoveredIndex + 1;
@@ -125,36 +128,40 @@ export class QuickSearch extends React.PureComponent<QuickSearchProps, QuickSear
       newHoveredIndex = hoveredIndex - 1;
     }
 
+    if (newHoveredIndex === undefined) return;
+
     if (newHoveredIndex < 0) newHoveredIndex = examples.length - 1;
     if (newHoveredIndex > examples.length - 1) newHoveredIndex = 0;
 
     this.setState({
-      hoveredIndex: newHoveredIndex
+      hoveredIndex: newHoveredIndex,
     });
-  }
+  };
 
   onSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({
       searchString: event.target.value,
-      hoveredIndex: 0
+      hoveredIndex: 0,
     });
-  }
+  };
 
   render() {
-    const {  } = this.props;
+    const {} = this.props;
     const { searchString } = this.state;
 
-    return <div className="quick-search">
-      <input
-        className="search-input"
-        placeholder="Search..."
-        ref={this.input}
-        value={searchString}
-        onChange={this.onSearch}
-      />
-      <div className="examples" ref={this.examplesContainer}>
-        {this.renderExamples()}
+    return (
+      <div className="quick-search">
+        <input
+          className="search-input"
+          placeholder="Search..."
+          ref={this.input}
+          value={searchString}
+          onChange={this.onSearch}
+        />
+        <div className="examples" ref={this.examplesContainer}>
+          {this.renderExamples()}
+        </div>
       </div>
-    </div>;
+    );
   }
 }

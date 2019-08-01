@@ -1,4 +1,4 @@
-import * as path from 'path';
+import path from 'path';
 
 export default function hereAndThere(cwd: string, dirname: string) {
   return {
@@ -14,6 +14,6 @@ export default function hereAndThere(cwd: string, dirname: string) {
       const trailingSlash = _p.charAt(_p.length - 1) === '/';
 
       return path.resolve(cwd, _p) + (trailingSlash ? '/' : '');
-    }
-  }
+    },
+  };
 }

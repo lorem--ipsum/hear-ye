@@ -7,7 +7,7 @@
 
 .quick-search {
   background-color: white;
-  border: 1px solid #CFD0CF;
+  border: 1px solid #cfd0cf;
   position: absolute;
   top: 20px;
   max-height: calc(100% - 40px);
@@ -23,8 +23,8 @@
   grid-template-columns: auto;
   grid-template-rows: 30px 1fr;
   grid-template-areas:
-    "search"
-    "examples";
+    'search'
+    'examples';
 
   .search-input {
     grid-area: search;
@@ -40,7 +40,6 @@
       padding: 10px 5px;
 
       .label {
-
       }
 
       .path {
@@ -48,8 +47,9 @@
         color: #848484;
       }
 
-      &:hover, &.active {
-        background-color: #5B8FFD;
+      &:hover,
+      &.active {
+        background-color: #5b8ffd;
         color: white;
 
         .path {

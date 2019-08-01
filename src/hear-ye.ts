@@ -1,9 +1,9 @@
-import * as process from 'process';
-import * as path from 'path';
+import process from 'process';
+import path from 'path';
 import { spawn } from 'child_process';
 import hereAndThere from './utils/here-and-there';
-import * as fs from 'fs-extra';
-import * as ora from 'ora';
+import fs from 'fs-extra';
+import ora from 'ora';
 import { args } from './options';
 
 const cwd = process.cwd();
@@ -25,9 +25,7 @@ if (fs.existsSync(there('tsconfig.json'))) {
 }
 
 async function cleanUp() {
-  const files = [
-    thereTmp('')
-  ];
+  const files = [thereTmp('')];
 
   return Promise.all(files.map(f => fs.remove(f)));
 }
@@ -37,7 +35,7 @@ interface Config {
   htmlStyleSheets?: string[];
 }
 
-async function replaceInFile(file: string, replacements: Record<string, string>)  {
+async function replaceInFile(file: string, replacements: Record<string, string>) {
   const buffer = await fs.readFile(file);
   let content = buffer.toString();
 
@@ -48,29 +46,37 @@ async function replaceInFile(file: string, replacements: Record<string, string>)
   return await fs.writeFile(file, content);
 }
 
-async function templatizeIndex(config: Config, options: {tolerant: boolean, once: boolean, pure: boolean}) {
-  const imports = (config.topLevelImports || (options.pure ? [] : ["import '@implydata/css-sanity/css-sanity.min.css';"]))
-    .join('\n')
-  ;
+async function templatizeIndex(
+  config: Config,
+  options: { tolerant: boolean; once: boolean; pure: boolean },
+) {
+  const imports = (
+    config.topLevelImports ||
+    (options.pure ? [] : ["import '@implydata/css-sanity/css-sanity.min.css';"])
+  ).join('\n');
 
   const { name, version, description, keywords } = packageJSON;
 
-  return replaceInFile(
-    thereTmp('index.tsx'),
-    {
-      '%topLevelImports%': imports,
-      '%project-info%': JSON.stringify({name, version, description, keywords}),
-      '%options%': JSON.stringify({strict: !options.tolerant, standalone: !!options.once, noNiceCss: !!options.pure}),
-      '%version%': hearYeVersion
-    }
-  );
+  return replaceInFile(thereTmp('index.tsx'), {
+    '%topLevelImports%': imports,
+    '%project-info%': JSON.stringify({ name, version, description, keywords }),
+    '%options%': JSON.stringify({
+      strict: !options.tolerant,
+      standalone: !!options.once,
+      noNiceCss: !!options.pure,
+    }),
+    '%version%': hearYeVersion,
+  });
 }
 
-async function templatizeHtml(config: Config, options: {pure: boolean}) {
+async function templatizeHtml(config: Config, options: { pure: boolean }) {
   const stylesheets = (
-    config.htmlStyleSheets
-    ||
-    (options.pure ? [] : ["<link href=\"https://fonts.googleapis.com/css?family=Open+Sans:400,600\" rel=\"stylesheet\">"])
+    config.htmlStyleSheets ||
+    (options.pure
+      ? []
+      : [
+          '<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">',
+        ])
   ).join('\n');
 
   return replaceInFile(thereTmp('index.html'), {
@@ -79,14 +85,14 @@ async function templatizeHtml(config: Config, options: {pure: boolean}) {
       font-size: 13px;
       box-sizing: border-box;
       font-family: 'Open Sans', sans-serif;
-    `
+    `,
   });
 }
 
-function getConfig(options: {config: string}) {
+function getConfig(options: { config: string | undefined }) {
   let config: Config = {};
 
-  if (fs.existsSync(options.config)) {
+  if (options.config && fs.existsSync(options.config)) {
     config = JSON.parse('' + fs.readFileSync(options.config));
   } else if (fs.existsSync(there('hear-ye.config.json'))) {
     config = JSON.parse('' + fs.readFileSync(there('hear-ye.config.json')));
@@ -99,17 +105,21 @@ function getConfig(options: {config: string}) {
   return config;
 }
 
-async function runOnce(options: {verbose: boolean, "no-cleanup": boolean}) {
+async function runOnce(options: { verbose: boolean; 'no-cleanup': boolean }) {
   const spinner = ora().start('Building...');
 
   const additionalArgs: string[] = [];
 
   if (options.verbose) additionalArgs.push('--display=verbose');
-  const webpack = spawn('webpack', ['-p', '--config', thereTmp('webpack.config.js'), ...additionalArgs], {stdio: 'inherit'});
+  const webpack = spawn(
+    'webpack',
+    ['-p', '--config', thereTmp('webpack.config.js'), ...additionalArgs],
+    { stdio: 'inherit' },
+  );
 
   return new Promise<number>((yes, no) => {
     webpack.on('close', async code => {
-      if (options["no-cleanup"] !== true) await cleanUp();
+      if (options['no-cleanup'] !== true) await cleanUp();
       if (code == 0) {
         spinner.succeed();
         yes(code);
@@ -137,7 +147,9 @@ module.exports = async function() {
     return;
   }
 
-  const server = spawn('webpack-dev-server', ['--config', thereTmp('webpack.config.js'), '--hot'], {stdio: 'inherit'});
+  const server = spawn('webpack-dev-server', ['--config', thereTmp('webpack.config.js'), '--hot'], {
+    stdio: 'inherit',
+  });
 
   server.on('close', async code => {
     if (options.noCleanup !== true) await cleanUp();
@@ -145,7 +157,6 @@ module.exports = async function() {
   });
 
   process.on('SIGINT', function() {
-
     server.kill();
 
     if (options.noCleanup === true) {
@@ -153,9 +164,7 @@ module.exports = async function() {
     } else {
       cleanUp()
         .then(() => process.exit())
-        .catch(() => process.exit())
-        ;
+        .catch(() => process.exit());
     }
   });
 };
-

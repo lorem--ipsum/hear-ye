@@ -1,5 +1,5 @@
-import * as React from 'react';
-import * as classNames from 'classnames';
+import React from 'react';
+import classNames from 'classnames';
 
 require('./error-overlay.scss');
 
@@ -7,8 +7,7 @@ export interface ErrorOverlayProps extends React.Props<any> {
   errors: string[];
 }
 
-export interface ErrorOverlayState {
-}
+export interface ErrorOverlayState {}
 
 export class ErrorOverlay extends React.Component<ErrorOverlayProps, ErrorOverlayState> {
   constructor(props: ErrorOverlayProps, context: any) {
@@ -19,10 +18,16 @@ export class ErrorOverlay extends React.Component<ErrorOverlayProps, ErrorOverla
   render() {
     const { errors } = this.props;
 
-    return <div className="hy-error-overlay">
-      {errors.map((e, i) => {
-        return <div key={i} className="error"><pre>{e}</pre></div>;
-      })}
-    </div>;
+    return (
+      <div className="hy-error-overlay">
+        {errors.map((e, i) => {
+          return (
+            <div key={i} className="error">
+              <pre>{e}</pre>
+            </div>
+          );
+        })}
+      </div>
+    );
   }
 }

@@ -1,7 +1,7 @@
 require('./sink.scss');
 
-import * as React from 'react';
-import * as classNames from 'classnames';
+import React from 'react';
+import classNames from 'classnames';
 
 export interface SinkProps extends React.Props<any> {
   customCSS?: string;
@@ -9,7 +9,7 @@ export interface SinkProps extends React.Props<any> {
 }
 
 export class Sink extends React.PureComponent<SinkProps, {}> {
-  private css: HTMLStyleElement;
+  private css: HTMLStyleElement | undefined;
 
   componentDidMount() {
     const { customCSS } = this.props;
@@ -28,24 +28,51 @@ export class Sink extends React.PureComponent<SinkProps, {}> {
     this.attachCSS(this.props.customCSS);
   }
 
-  attachCSS(css: string) {
+  attachCSS(css: string | undefined) {
+    if (!css) return;
+
     var element = document.createElement('style');
     element.setAttribute('type', 'text/css');
     element.innerHTML = css;
 
-    document.getElementsByTagName('head').item(0).appendChild(element);
+    const head = document.getElementsByTagName('head');
+
+    if (!head) return;
+
+    const item = head.item(0);
+
+    if (!item) return;
+
+    item.appendChild(element);
+
     this.css = element;
   }
 
   detachCSS() {
     if (!this.css) return;
 
-    document.getElementsByTagName('head').item(0).removeChild(this.css);
+    const head = document.getElementsByTagName('head');
+
+    if (!head) return;
+
+    const item = head.item(0);
+
+    if (!item) return;
+
+    item.removeChild(this.css);
   }
 
   render() {
     const { children, noPadding } = this.props;
 
-    return <div className={classNames('hy-sink hy-section', {'no-padding': noPadding})}>{children}</div>;
+    return (
+      <div
+        className={classNames('hy-sink hy-section', {
+          'no-padding': noPadding,
+        })}
+      >
+        {children}
+      </div>
+    );
   }
 }

@@ -30,7 +30,8 @@
   }
 
   .example {
-    &:hover, &.hover {
+    &:hover,
+    &.hover {
       &:not(.deaf):not(.selected) {
         background-color: #b1caff;
       }
@@ -38,7 +39,7 @@
 
     &.selected {
       cursor: initial;
-      background-color: #5B8FFD;
+      background-color: #5b8ffd;
       color: white;
     }
   }
@@ -48,5 +49,4 @@
       background-color: #b1caff;
     }
   }
-
 }

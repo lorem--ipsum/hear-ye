@@ -1,5 +1,5 @@
-import * as React from 'react';
-import * as classNames from 'classnames';
+import React from 'react';
+import classNames from 'classnames';
 import { Icon } from '../icon/icon';
 import { arrows_keyboard_right } from 'react-icons-kit/linea/arrows_keyboard_right';
 
@@ -11,6 +11,8 @@ import { Example } from '../models';
 require('./side-bar.scss');
 
 function sort(examples: Example[]) {
+  if (!examples) return [];
+
   return [...examples].sort((a, b) => {
     if (a.label > b.label) return 1;
     if (a.label < b.label) return -1;
@@ -34,36 +36,41 @@ export class SideBar extends React.Component<SideBarProps, {}> {
   }
 
   renderExample = (example: Example, index: number, level: number) => {
-    const { onClick, selectedExample} = this.props;
+    const { onClick, selectedExample } = this.props;
 
     const hasChildren = example.examples && example.examples.length > 0;
 
     if (!hasChildren) {
-      return <div
-        className={classNames('example', {selected: selectedExample === example})}
-        onClick={() => onClick(example)}
-        ref={selectedExample === example ? this.selectedExampleRef : null}
-        key={index}
-      >
-        <div className="label" style={{paddingLeft: level * 10 + 20}}>
-          <Icon size={15} icon={arrows_keyboard_right}/>
-          <div className="label-content">{example.label}</div>
-          {example.deprecated ? <Deprecated/> : null}
+      return (
+        <div
+          className={classNames('example', {
+            selected: selectedExample === example,
+          })}
+          onClick={() => onClick(example)}
+          ref={selectedExample === example ? this.selectedExampleRef : null}
+          key={index}
+        >
+          <div className="label" style={{ paddingLeft: level * 10 + 20 }}>
+            <Icon size={15} icon={arrows_keyboard_right} />
+            <div className="label-content">{example.label}</div>
+            {example.deprecated ? <Deprecated /> : null}
+          </div>
         </div>
-      </div>;
+      );
     }
 
-    return <ExampleFolder
-      key={index}
-      label={example.label}
-      className="example-folder"
-      level={level}
-      open={selectedExample && selectedExample.path[level] === example.label}
-    >
-      {sort(example.examples).map((e, i) => this.renderExample(e, i, level + 1))}
-
-    </ExampleFolder>;
-  }
+    return (
+      <ExampleFolder
+        key={index}
+        label={example.label}
+        className="example-folder"
+        level={level}
+        open={selectedExample && selectedExample.path[level] === example.label}
+      >
+        {sort(example.examples).map((e, i) => this.renderExample(e, i, level + 1))}
+      </ExampleFolder>
+    );
+  };
 
   componentDidUpdate() {
     if (!this.selectedExampleRef.current) return;
@@ -78,8 +85,8 @@ export class SideBar extends React.Component<SideBarProps, {}> {
   render() {
     const { examples } = this.props;
 
-    return <div className="hy-side-bar">
-      { sort(examples).map((e, i) => this.renderExample(e, i, 0)) }
-    </div>;
+    return (
+      <div className="hy-side-bar">{sort(examples).map((e, i) => this.renderExample(e, i, 0))}</div>
+    );
   }
 }

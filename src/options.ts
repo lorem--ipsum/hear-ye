@@ -1,4 +1,4 @@
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 
 export function args() {
   return yargs
@@ -7,45 +7,43 @@ export function args() {
     .option('once', {
       describe: 'Runs only once',
       default: false,
-      type: 'boolean'
+      type: 'boolean',
     })
 
     .option('verbose', {
       alias: 'v',
       default: false,
-      type: 'boolean'
+      type: 'boolean',
     })
 
     .option('pure', {
       describe: 'no sanity code added',
       default: false,
-      type: 'boolean'
+      type: 'boolean',
     })
 
     .option('tolerant', {
       default: false,
-      type: 'boolean'
+      type: 'boolean',
     })
 
     .option('publish', {
       default: false,
-      type: 'boolean'
+      type: 'boolean',
     })
 
     .option('no-cleanup', {
       default: false,
-      type: 'boolean'
+      type: 'boolean',
     })
 
     .option('config', {
       alias: 'c',
-      type: 'string'
+      type: 'string',
     })
 
     .help('h')
     .alias('h', 'help')
 
-    .strict()
-
-    ;
+    .strict();
 }

@@ -1,5 +1,4 @@
-import * as React from 'react';
-import * as classNames from 'classnames';
+import React from 'react';
 
 import { Deprecated } from '../deprecated/deprecated';
 import { Example } from '../models';
@@ -19,8 +18,13 @@ export class ExampleSummary extends React.Component<ExampleSummaryProps, {}> {
   render() {
     const { example } = this.props;
 
-    return <div className="hy-example-summary">
-      <div className="title">{example.path.join(' > ')}{example.deprecated ? <Deprecated/> : null}</div>
-    </div>;
+    return (
+      <div className="hy-example-summary">
+        <div className="title">
+          {example.path.join(' > ')}
+          {example.deprecated ? <Deprecated /> : null}
+        </div>
+      </div>
+    );
   }
 }

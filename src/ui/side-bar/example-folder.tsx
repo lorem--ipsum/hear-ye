@@ -1,5 +1,5 @@
-import * as React from 'react';
-import * as classNames from 'classNames';
+import React from 'react';
+import classNames from 'classnames';
 
 import { basic_folder } from 'react-icons-kit/linea/basic_folder';
 
@@ -20,7 +20,7 @@ export class ExampleFolder extends React.Component<ExampleFolderProps, ExampleFo
   static getDerivedStateFromProps(props: ExampleFolderProps, state: ExampleFolderState) {
     if (props.open && state.expanded == null) {
       return {
-        expanded: props.open
+        expanded: props.open,
       };
     }
 
@@ -37,18 +37,19 @@ export class ExampleFolder extends React.Component<ExampleFolderProps, ExampleFo
     const { className, level, label, children } = this.props;
     const { expanded } = this.state;
 
-    return <div className={classNames(className, {open: expanded})}>
-      <div className="label" onClick={() => this.setState({expanded: !expanded})}  style={{paddingLeft: level * 10 + 20}}>
-        <Icon size={15} icon={basic_folder}/>
-        <div className="label-content">{label}</div>
-      </div>
-
-      {expanded &&
-        <div className="children">
-          {children}
+    return (
+      <div className={classNames(className, { open: expanded })}>
+        <div
+          className="label"
+          onClick={() => this.setState({ expanded: !expanded })}
+          style={{ paddingLeft: level * 10 + 20 }}
+        >
+          <Icon size={15} icon={basic_folder} />
+          <div className="label-content">{label}</div>
         </div>
-      }
 
-    </div>
+        {expanded && <div className="children">{children}</div>}
+      </div>
+    );
   }
 }
