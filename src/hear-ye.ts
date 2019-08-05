@@ -121,7 +121,7 @@ async function runOnce(options: { verbose: boolean; 'no-cleanup': boolean }) {
   return new Promise<number>((yes, no) => {
     webpack.on('close', async code => {
       if (options['no-cleanup'] !== true) await cleanUp();
-      if (code === 0 || code === '0') {
+      if (code === 0) {
         spinner.succeed();
         yes(code);
       } else {

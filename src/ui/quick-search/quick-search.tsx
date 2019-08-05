@@ -23,12 +23,14 @@ function flatten(examples: Example[]) {
   for (let i = 0; i < examples.length; i++) {
     const e = examples[i];
 
-    if (!e.examples) {
+    if (e.examples.length === 0) {
       flatExamples.push(e);
     } else {
       flatExamples.push(...flatten(e.examples));
     }
   }
+
+  console.log(flatExamples);
 
   return flatExamples;
 }
@@ -47,7 +49,7 @@ export class QuickSearch extends React.PureComponent<QuickSearchProps, QuickSear
   constructor(props: QuickSearchProps, context: any) {
     super(props, context);
     this.state = {
-      flatExamples: [],
+      flatExamples: flatten(props.examples),
       searchString: '',
       hoveredIndex: -1,
     };
