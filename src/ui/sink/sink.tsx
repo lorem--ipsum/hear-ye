@@ -1,67 +1,16 @@
 import classNames from 'classnames';
 import React from 'react';
 
+import { StyleTag } from '../style-tag/style-tag';
+
 export interface SinkProps extends React.Props<any> {
   customCSS?: string;
   noPadding?: boolean;
 }
 
 export class Sink extends React.PureComponent<SinkProps, {}> {
-  private css: HTMLStyleElement | undefined;
-
-  componentDidMount() {
-    const { customCSS } = this.props;
-    if (customCSS) this.attachCSS(customCSS);
-  }
-
-  componentWillUnmount() {
-    const { customCSS } = this.props;
-    if (customCSS) this.detachCSS();
-  }
-
-  componentDidUpdate(prevProps: SinkProps) {
-    if (this.props === prevProps.customCSS) return;
-
-    this.detachCSS();
-    this.attachCSS(this.props.customCSS);
-  }
-
-  attachCSS(css: string | undefined) {
-    if (!css) return;
-
-    const element = document.createElement('style');
-    element.setAttribute('type', 'text/css');
-    element.innerHTML = css;
-
-    const head = document.getElementsByTagName('head');
-
-    if (!head) return;
-
-    const item = head.item(0);
-
-    if (!item) return;
-
-    item.appendChild(element);
-
-    this.css = element;
-  }
-
-  detachCSS() {
-    if (!this.css) return;
-
-    const head = document.getElementsByTagName('head');
-
-    if (!head) return;
-
-    const item = head.item(0);
-
-    if (!item) return;
-
-    item.removeChild(this.css);
-  }
-
   render() {
-    const { children, noPadding } = this.props;
+    const { children, noPadding, customCSS } = this.props;
 
     return (
       <div
@@ -69,6 +18,7 @@ export class Sink extends React.PureComponent<SinkProps, {}> {
           'no-padding': noPadding,
         })}
       >
+        <StyleTag>{customCSS}</StyleTag>
         {children}
       </div>
     );

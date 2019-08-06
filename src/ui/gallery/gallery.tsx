@@ -1,9 +1,12 @@
 import React from 'react';
 
 import { ExampleSummary } from '../example-summary/example-summary';
+import { HeaderBar } from '../header-bar/header-bar';
 import { Example } from '../models';
 import { QuickSearch } from '../quick-search/quick-search';
 import { SideBar } from '../side-bar/side-bar';
+
+import { StaticListenerDelegate } from './static-listener-delegate';
 
 import './gallery.scss';
 
@@ -26,9 +29,31 @@ interface GalleryProps {
 interface GalleryState {
   exampleId?: string;
   quickSearchVisible?: boolean;
+  wrapper?: JSX.Element;
+}
+
+interface StaticProps {
+  wrapper?: JSX.Element;
 }
 
 export class Gallery extends React.Component<GalleryProps, GalleryState> {
+  static getDerivedStateFromProps() {
+    return {
+      wrapper: Gallery.props.wrapper,
+    };
+  }
+
+  static headerBarControls: JSX.Element[] = [];
+
+  static props: StaticProps = {};
+  static propsListener = new StaticListenerDelegate<StaticProps>();
+
+  static setWrapper(wrapper: JSX.Element | undefined) {
+    this.props.wrapper = wrapper;
+
+    this.propsListener.dispatch(this.props);
+  }
+
   static examples: Example[] = [];
 
   static add(example: { component: JSX.Element; path: string[]; deprecated?: boolean }) {
@@ -75,29 +100,48 @@ export class Gallery extends React.Component<GalleryProps, GalleryState> {
     this.setTitle();
   }
 
-  setTitle = () => {
-    const { projectInfo } = this.props;
-    const { exampleId } = this.state;
+  onStaticPropsChange = (newStaticProps: StaticProps) => {
+    this.setState({
+      wrapper: newStaticProps.wrapper,
+    });
+  };
 
-    const example = exampleId ? this.getExampleForId(exampleId) : null;
+  getProjectId() {
+    const { projectInfo } = this.props;
 
     const projectNameBits = projectInfo.name.split('/');
 
-    const titleBits = [
-      projectNameBits[projectNameBits.length - 1] + '@' + projectInfo.version,
-      example ? example.label : null,
-    ];
+    const projectName = projectNameBits[projectNameBits.length - 1];
+    const projectNameSpace = projectNameBits[0];
+
+    return {
+      name: projectName,
+      namespace: projectName !== projectNameSpace ? projectNameSpace : undefined,
+      version: projectInfo.version,
+    };
+  }
+
+  setTitle = () => {
+    const { exampleId } = this.state;
+
+    const example = exampleId ? this.getExampleForId(exampleId) : undefined;
+
+    const { name, version } = this.getProjectId();
+
+    const titleBits = [name + '@' + version, example ? example.label : undefined];
 
     window.document.title = titleBits.filter(Boolean).join(' | ');
   };
 
   componentDidMount() {
+    Gallery.propsListener.add(this.onStaticPropsChange);
     window.addEventListener('hashchange', this.onHashChange);
     window.addEventListener('keydown', this.onKeyDown);
     this.onHashChange();
   }
 
   componentWillUnmount() {
+    Gallery.propsListener.remove(this.onStaticPropsChange);
     window.removeEventListener('hashchange', this.onHashChange);
     window.removeEventListener('keydown', this.onKeyDown);
   }
@@ -199,6 +243,14 @@ export class Gallery extends React.Component<GalleryProps, GalleryState> {
     );
   }
 
+  wrap(content: JSX.Element) {
+    const { wrapper } = this.state;
+
+    if (!wrapper) return content;
+
+    return React.cloneElement(wrapper, { children: content });
+  }
+
   render() {
     const { strict } = this.props;
     const { exampleId, quickSearchVisible } = this.state;
@@ -213,8 +265,12 @@ export class Gallery extends React.Component<GalleryProps, GalleryState> {
 
     const examples = Gallery.examples;
 
+    const { name, version } = this.getProjectId();
+
     const content = (
       <div className="hy-gallery">
+        <HeaderBar label={`${name}@${version}`}>{Gallery.headerBarControls}</HeaderBar>
+
         <SideBar
           examples={examples}
           onClick={this.goToExample}
@@ -227,8 +283,8 @@ export class Gallery extends React.Component<GalleryProps, GalleryState> {
       </div>
     );
 
-    if (!strict) return content;
+    if (!strict) return this.wrap(content);
 
-    return <React.StrictMode>{content}</React.StrictMode>;
+    return <React.StrictMode>{this.wrap(content)}</React.StrictMode>;
   }
 }

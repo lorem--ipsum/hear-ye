@@ -1,8 +1,6 @@
 .hy-gallery {
   @import '../colors';
 
-  $side-bar-width: 250px;
-  $outer-padding: 5px;
   $inner-color: $main-super-light;
 
   position: absolute;
@@ -10,27 +8,32 @@
   right: 0;
   top: 0;
   bottom: 0;
+  padding: 5px;
+
+  display: grid;
+  grid-template-columns: 250px auto;
+  grid-template-rows: 30px auto;
+  grid-gap: 5px;
+  grid-template-areas:
+    'header-bar header-bar'
+    'side-bar main';
 
   background-color: $main-light;
 
+  > .hy-header-bar {
+    grid-area: header-bar;
+  }
+
   > .hy-side-bar {
-    position: absolute;
-    left: $outer-padding;
-    width: $side-bar-width;
-    top: $outer-padding;
-    bottom: $outer-padding;
+    grid-area: side-bar;
 
     background-color: $inner-color;
     border-radius: 1px;
   }
 
   > .main {
-    position: absolute;
+    grid-area: main;
     padding: 10px;
-    left: $side-bar-width + $outer-padding + 5px;
-    right: $outer-padding;
-    top: $outer-padding;
-    bottom: $outer-padding;
     overflow: auto;
 
     background-color: $inner-color;
