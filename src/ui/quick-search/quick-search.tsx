@@ -30,8 +30,6 @@ function flatten(examples: Example[]) {
     }
   }
 
-  console.log(flatExamples);
-
   return flatExamples;
 }
 
