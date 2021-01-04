@@ -46,7 +46,7 @@
     "fuse.js": "^3.4.5",
     "html-webpack-plugin": "^3.2.0",
     "muskad": "^2.0.0",
-    "node-sass": "^4.13.0",
+    "node-sass": "^4.14.0",
     "ora": "^4.0.2",
     "postcss-loader": "^3.0.0",
     "postcss-preset-env": "^6.7.0",
@@ -63,7 +63,7 @@
     "typescript": "^3.6.4",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.9",
-    "webpack-dev-server": "^3.9.0",
+    "webpack-dev-server": "^3.11.1",
     "yargs": "^14.2.0"
   },
   "devDependencies": {
