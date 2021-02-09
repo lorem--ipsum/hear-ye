@@ -9,6 +9,7 @@ import './quick-search.scss';
 interface QuickSearchProps extends React.Props<any> {
   examples: Example[];
   onSelect: (example: Example) => void;
+  onHover: (example: Example | undefined) => void;
 }
 
 interface QuickSearchState {
@@ -63,7 +64,7 @@ export class QuickSearch extends React.PureComponent<QuickSearchProps, QuickSear
       threshold: 0.5,
     });
 
-    return fuse.search(searchString);
+    return fuse.search(searchString).map(r => r.item);
   }
 
   renderExamples() {
@@ -109,7 +110,7 @@ export class QuickSearch extends React.PureComponent<QuickSearchProps, QuickSear
   }
 
   onKeyDown = (event: KeyboardEvent) => {
-    const { onSelect } = this.props;
+    const { onSelect, onHover } = this.props;
     const { hoveredIndex } = this.state;
     const examples = this.getFilteredExamples();
 
@@ -136,13 +137,29 @@ export class QuickSearch extends React.PureComponent<QuickSearchProps, QuickSear
     this.setState({
       hoveredIndex: newHoveredIndex,
     });
+
+    onHover(examples[newHoveredIndex]);
   };
 
   onSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({
-      searchString: event.target.value,
-      hoveredIndex: 0,
-    });
+    const { onHover } = this.props;
+
+    const searchString = event.target.value;
+
+    this.setState(
+      {
+        searchString,
+        hoveredIndex: 0,
+      },
+      () => {
+        if (searchString === '') {
+          onHover(undefined);
+        }
+
+        const examples = this.getFilteredExamples();
+        onHover(examples[0]);
+      },
+    );
   };
 
   render() {

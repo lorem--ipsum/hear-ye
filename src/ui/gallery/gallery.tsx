@@ -27,6 +27,7 @@ interface GalleryProps {
 }
 
 interface GalleryState {
+  hoveredExample?: Example;
   exampleId?: string;
   quickSearchVisible?: boolean;
   wrapper?: JSX.Element;
@@ -156,6 +157,7 @@ export class Gallery extends React.Component<GalleryProps, GalleryState> {
       // Escape
       this.setState({
         quickSearchVisible: false,
+        hoveredExample: undefined,
       });
     }
   };
@@ -165,6 +167,7 @@ export class Gallery extends React.Component<GalleryProps, GalleryState> {
     this.setState(
       {
         exampleId: hash,
+        hoveredExample: undefined,
       },
       this.setTitle,
     );
@@ -174,6 +177,12 @@ export class Gallery extends React.Component<GalleryProps, GalleryState> {
     const url = item.path.map(encodeURI).join('/');
 
     window.location.hash = url;
+  };
+
+  previewExample = (item: Example | undefined) => {
+    this.setState({
+      hoveredExample: item,
+    });
   };
 
   getExampleForId(id: string): Example | undefined {
@@ -201,7 +210,7 @@ export class Gallery extends React.Component<GalleryProps, GalleryState> {
 
   renderMain() {
     const { projectInfo, hearYeVersion } = this.props;
-    const { exampleId } = this.state;
+    const { exampleId, hoveredExample } = this.state;
 
     if (!exampleId) {
       const { name, description, keywords, version } = projectInfo;
@@ -229,7 +238,11 @@ export class Gallery extends React.Component<GalleryProps, GalleryState> {
       );
     }
 
-    const example = exampleId ? this.getExampleForId(exampleId) : null;
+    let example = exampleId ? this.getExampleForId(exampleId) : null;
+
+    if (hoveredExample) {
+      example = hoveredExample;
+    }
 
     if (!example) {
       return <div className="main">404, I guess?</div>;
@@ -279,7 +292,9 @@ export class Gallery extends React.Component<GalleryProps, GalleryState> {
 
         {this.renderMain()}
 
-        {quickSearchVisible && <QuickSearch examples={examples} onSelect={openExample} />}
+        {quickSearchVisible && (
+          <QuickSearch examples={examples} onSelect={openExample} onHover={this.previewExample} />
+        )}
       </div>
     );
 

@@ -132,7 +132,7 @@ async function runOnce(options: { verbose: boolean; 'no-cleanup': boolean }) {
   });
 }
 
-module.exports = async function() {
+module.exports = async function hearYe() {
   const options = args().parse();
 
   const config = getConfig(options);
@@ -154,10 +154,10 @@ module.exports = async function() {
 
   server.on('close', async code => {
     if (options.noCleanup !== true) await cleanUp();
-    process.exit(code);
+    process.exit(code == null ? undefined : code);
   });
 
-  process.on('SIGINT', function() {
+  process.on('SIGINT', function onSigInt() {
     server.kill();
 
     if (options.noCleanup === true) {
