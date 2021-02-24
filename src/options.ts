@@ -32,8 +32,8 @@ export function args() {
       type: 'boolean',
     })
 
-    .option('no-cleanup', {
-      default: false,
+    .option('cleanup', {
+      default: true,
       type: 'boolean',
     })
 

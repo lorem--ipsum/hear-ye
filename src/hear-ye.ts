@@ -106,7 +106,7 @@ function getConfig(options: { config: string | undefined }) {
   return config;
 }
 
-async function runOnce(options: { verbose: boolean; 'no-cleanup': boolean }) {
+async function runOnce(options: { verbose: boolean; cleanup: boolean }) {
   const spinner = ora().start('Building...');
 
   const additionalArgs: string[] = [];
@@ -120,7 +120,7 @@ async function runOnce(options: { verbose: boolean; 'no-cleanup': boolean }) {
 
   return new Promise<number>((yes, no) => {
     webpack.on('close', async code => {
-      if (options['no-cleanup'] !== true) await cleanUp();
+      if (options.cleanup === true) await cleanUp();
       if (code === 0) {
         spinner.succeed();
         yes(code);
@@ -148,19 +148,19 @@ module.exports = async function hearYe() {
     return;
   }
 
-  const server = spawn('webpack-dev-server', ['--config', thereTmp('webpack.config.js'), '--hot'], {
+  const server = spawn('webpack', ['serve', '--config', thereTmp('webpack.config.js'), '--hot'], {
     stdio: 'inherit',
   });
 
   server.on('close', async code => {
-    if (options.noCleanup !== true) await cleanUp();
+    if (options.cleanup === true) await cleanUp();
     process.exit(code == null ? undefined : code);
   });
 
   process.on('SIGINT', function onSigInt() {
     server.kill();
 
-    if (options.noCleanup === true) {
+    if (options.cleanup !== true) {
       process.exit();
     } else {
       cleanUp()

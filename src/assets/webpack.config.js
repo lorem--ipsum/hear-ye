@@ -66,12 +66,11 @@ module.exports = {
           {
             loader: 'postcss-loader',
             options: {
-              ident: 'postcss',
-              plugins: () => [
-                require('postcss-preset-env')({
-                  overrideBrowserslist: ['> 1%', 'last 3 versions', 'Firefox ESR', 'Opera 12.1'],
-                }),
-              ],
+              postcssOptions: {
+                plugins: [
+                  ['postcss-preset-env', {}],
+                ],
+              },
             },
           },
           { loader: 'sass-loader' },
@@ -88,6 +87,11 @@ module.exports = {
     plugins: [new TsconfigPathsPlugin({})],
     symlinks: false,
     cacheWithContext: false,
+    fallback: {
+      fs: false,
+      path: false,
+      crypto: false,
+    },
   },
   output: {
     filename: '[name].js',
@@ -103,8 +107,4 @@ module.exports = {
     }),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
   ],
-
-  node: {
-    fs: 'empty',
-  },
 };
