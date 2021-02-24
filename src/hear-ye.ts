@@ -114,7 +114,7 @@ async function runOnce(options: { verbose: boolean; cleanup: boolean }) {
   if (options.verbose) additionalArgs.push('--display=verbose');
   const webpack = spawn(
     'webpack',
-    ['-p', '--config', thereTmp('webpack.config.js'), ...additionalArgs],
+    ['--mode=production', '--config', thereTmp('webpack.config.js'), ...additionalArgs],
     { stdio: 'inherit' },
   );
 
